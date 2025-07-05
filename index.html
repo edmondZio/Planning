@@ -62,12 +62,15 @@
         }
 
         .schedule-table td {
-            padding: 12px 8px;
-            text-align: center;
-            border: 1px solid #ddd;
-            transition: all 0.3s ease;
-            word-break: keep-all;
+              padding: 12px 8px;
+              text-align: center;
+              border: 1px solid #ddd;
+              transition: all 0.3s ease;
+              word-break: break-word;     /* à corriger */
+              white-space: normal;        /* à ajouter */
+              overflow-wrap: break-word;  /* optionnel mais utile */
         }
+
 
         .subject-row {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -297,14 +300,17 @@
 }
 .schedule-table th,
 .schedule-table td{
+    width: 14%;
     border:1px solid #ccc;
     padding:8px 6px;
     text-align:center;
-    word-wrap:keep-all;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
 }
 .schedule-table th:first-child,
 .schedule-table td:first-child{
-    width:12%;                /* colonne étiquette                    */
+    width:10%;                /* colonne étiquette                    */
     text-align:left;
 }
 .phantom{                       /* cellule fantôme, conserve la largeur */
