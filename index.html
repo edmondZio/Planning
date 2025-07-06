@@ -167,7 +167,7 @@
                - .clickable-cell[data-link] : Cible les cellules qui ont l'attribut 'data-link'.
                - :not([data-link=""]) : ...mais PAS celles où l'attribut est vide.
                - ::after : Crée un pseudo-élément à la fin du contenu de la cellule. */
-            content: "🔗"; /* Le contenu à ajouter. MODIFICATION : Vous pouvez utiliser un autre emoji ou du texte. */
+            content: " "; /* 🔗 Le contenu à ajouter. MODIFICATION : Vous pouvez utiliser un autre emoji ou du texte. */
             position: absolute; /* Permet de le placer précisément par rapport à la cellule (qui est en 'position: relative'). */
             top: 5px; /* Distance du haut. */
             right: 5px; /* Distance de la droite. */
@@ -250,9 +250,9 @@
             position: relative; /* Pour l'icône de lien. */
         }
         
-        /* Même logique que pour les cellules du tableau, pour ajouter une icône de lien. */
+        /* Même logique que pour les cellules du tableau, pour ajouter une icône de lien. 🔗 */
         .resource-item[data-link]:not([data-link=""])::after {
-            content: "🔗";
+            content: " ";
             position: absolute;
             top: 50%;
             right: 15px;
@@ -528,10 +528,10 @@
                     <!-- Pour chaque ressource :
                          - MODIFICATION : Changez l'icône, le texte et le statut.
                          - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' avec le bon URL. -->
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/lightboxgallery/view.php?id=7644">
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/lightboxgallery/view.php?id=7961">
                         <span class="icon">🧠</span><span class="text">Cartes mentales</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/folder/view.php?id=7643">
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/folder/view.php?id=7960">
                         <span class="icon">🔄</span><span class="text">Classes inversées</span><span class="status">✅</span>
                     </div>
                     <div class="resource-item" data-link="https://www.auto-math.be/">
@@ -545,9 +545,10 @@
                 <!-- AUTRES CATÉGORIES (même principe) -->
                 <div class="resource-category auto-evaluations">
                     <h3>🎯 AUTO-ÉVALUATIONS</h3>
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7767"><span class="icon">⚡</span><span class="text">Simplifications</span><span class="status">📊</span></div>
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7768"><span class="icon">🔍</span><span class="text">Problèmes</span><span class="status">📊</span></div>
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7781"><span class="icon">📐</span><span class="text">Calcul vectoriel</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7964"><span class="icon">⚡</span><span class="text">Simplifications</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7966"><span class="icon">🔍</span><span class="text">Problèmes</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7967"><span class="icon">📐</span><span class="text">Calcul vectoriel</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7968"><span class="icon">📐</span><span class="text">Géométrie</span><span class="status">📊</span></div>
                 </div>
 
                 <div class="resource-category videos">
@@ -560,8 +561,8 @@
 
                 <div class="resource-category pdfs">
                     <h3>📄 PDFs</h3>
-                    <div class="resource-item" data-link="#"><span class="icon">📚</span><span class="text">Support du cours / corrigés</span><span class="status">✅</span></div>
-                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/hvp/view.php?id=7893"><span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/folder/view.php?id=7962"><span class="icon">📚</span><span class="text">Support du cours / corrigés</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/hvp/view.php?id=7969"><span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/ESvntnKUnoRCjhRriCk3rb8BdSw0QpgMggODmm7WHA7T2g?e=sQHBS6"><span class="icon">📝</span><span class="text">Correctif du Syllabus + Errata</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/ET93Emn3VZ9Lol1Q1IaEL10BFGnnYFCS1vSiyiGFkGtkqQ?e=afCy5A"><span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span></div>
                 </div>
@@ -655,7 +656,7 @@
          */
         function openForum() {
             // MODIFICATION LIEN : Remplacez '#' par le vrai lien vers votre forum.
-            window.open('#', '_blank');
+            window.open('https://aidealareussite.uclouvain.be/mod/forum/view.php?id=7965', '_blank');
         }
 
         // --- GESTION DES CLICS EN DEHORS DE LA MODALE ---
