@@ -66,11 +66,10 @@
               text-align: center;
               border: 1px solid #ddd;
               transition: all 0.3s ease;
-              word-break: break-word;     /* à corriger */
-              white-space: normal;        /* à ajouter */
-              overflow-wrap: break-word;  /* optionnel mais utile */
+              word-break: break-word;
+              white-space: normal;
+              overflow-wrap: break-word;
         }
-
 
         .subject-row {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -103,9 +102,24 @@
         }
 
         .clickable-cell {
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
             cursor: pointer;
+            transition: all 0.2s ease;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            hyphens: none;
             position: relative;
-            transition: all 0.3s ease;
+        }
+
+        .time-cell {
+            background: #fefcbf;
+            color: #d69e2e;
+            font-weight: 600;
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
         }
 
         .clickable-cell:hover {
@@ -114,7 +128,7 @@
             filter: brightness(1.1);
         }
 
-        .clickable-cell::after {
+        .clickable-cell[data-link]:not([data-link=""])::after {
             content: "🔗";
             position: absolute;
             top: 5px;
@@ -181,6 +195,17 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .resource-item[data-link]:not([data-link=""])::after {
+            content: "🔗";
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            opacity: 0.7;
         }
 
         .resource-item:hover {
@@ -258,6 +283,66 @@
             color: #000;
         }
 
+        .period-separator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .phantom {
+            visibility: hidden;
+        }
+
+        .schedule-wrapper {
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            width: 14%;
+            border: 1px solid #ccc;
+            padding: 8px 6px;
+            text-align: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .schedule-table th:first-child,
+        .schedule-table td:first-child {
+            width: 10%;
+            text-align: left;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-button {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button.close-btn {
+            background: #6c757d;
+            color: white;
+            margin-right: 10px;
+        }
+        
         @media (max-width: 768px) {
             .schedule-table {
                 font-size: 0.9rem;
@@ -276,251 +361,195 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 Planning du cours de mathématiques</h1>
+            <h1>📚 Planning du module 4 du cours de mathématiques</h1>
             <p>Cliquez sur les éléments pour accéder aux ressources</p>
         </div>
 
-        <style>
-/* --------- Mise en forme commune --------- */
-.schedule-wrapper{
-    overflow-x:auto;
-    padding:20px;
-}
-.schedule-table{
-    width:100%;                 /* même largeur totale                 */
-    table-layout:fixed;         /* colonnes de largeur fixe, uniformes  */
-    border-collapse:collapse;
-    margin-bottom:30px;         /* écart entre matin & après-midi       */
-    font-family:Arial, sans-serif;
-}
-.schedule-table th,
-.schedule-table td{
-    width: 14%;
-    border:1px solid #ccc;
-    padding:8px 6px;
-    text-align:center;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-
-}
-.schedule-table th:first-child,
-.schedule-table td:first-child{
-    width:10%;                /* colonne étiquette                    */
-    text-align:left;
-}
-.phantom{                       /* cellule fantôme, conserve la largeur */
-    visibility:hidden;
-}
-.clickable-cell{cursor:pointer}
-/* (vos autres règles éventuelles) */
-</style>
-
-<div class="schedule-wrapper">
-    <!-- MATIN ------------------------------------------------------------- -->
-    <table class="schedule-table">
-        <thead>
-            <tr>
-                <th style="width:220px;"></th>
-                <th>Vendredi 1/8</th>
-                <th>Samedi 2/8</th>
-                <th>Lundi 4/8</th>
-                <th>Mardi 5/8</th>
-                <th>Mercredi 6/8</th>
-                <th>Jeudi 7/8</th>
-                <th>Vendredi 8/8</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="subject-row">
-                <td class="row-label">📖 Sujet</td>
-                <td class="clickable-cell" data-subject="Simplification">Simplification</td>
-                <td class="clickable-cell" data-subject="Problèmes">Problèmes</td>
-                <td class="clickable-cell" data-subject="Trigonométrie">Trigonométrie</td>
-                <td class="clickable-cell" data-subject="Géométrie">Géométrie</td>
-                <td class="clickable-cell" data-subject="Les fonctions">Les fonctions</td>
-                <td class="clickable-cell" data-subject="Les intégrales">Les intégrales</td>
-                <td class="clickable-cell" data-subject="Révision générale">Révision générale</td>
-            </tr>
-            <tr class="preparation-row">
-                <td class="row-label">🎯 À préparer pour:</td>
-                <td class="clickable-cell" data-wooflash="1">Wooflash&nbsp;1</td>
-                <td class="clickable-cell" data-wooflash="3">Wooflash&nbsp;3</td>
-                <td class="clickable-cell" data-wooflash="5">Wooflash&nbsp;5</td>
-                <td class="clickable-cell" data-wooflash="7">Wooflash&nbsp;7</td>
-                <td class="clickable-cell" data-wooflash="9">Wooflash&nbsp;9</td>
-                <td class="clickable-cell" data-wooflash="11">Wooflash&nbsp;11</td>
-                <td class="clickable-cell" data-wooflash="13">Wooflash&nbsp;13</td>
-            </tr>
-            <tr class="questionnaire-row">
-                <td class="row-label">❓ Questions à traiter:</td>
-                <td class="clickable-cell" data-questionnaire="1">Questionnaire&nbsp;1</td>
-                <td class="clickable-cell" data-questionnaire="3">Questionnaire&nbsp;3</td>
-                <td class="clickable-cell" data-questionnaire="5">Questionnaire&nbsp;5</td>
-                <td class="clickable-cell" data-questionnaire="7">Questionnaire&nbsp;7</td>
-                <td class="clickable-cell" data-questionnaire="9">Questionnaire&nbsp;9</td>
-                <td class="clickable-cell" data-questionnaire="11">Questionnaire&nbsp;11</td>
-                <td class="clickable-cell" data-questionnaire="13">Questionnaire&nbsp;13</td>
-            </tr>
-            <tr class="time-row">
-                <td class="row-label">🕐 Horaires de cours</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-                <td class="clickable-cell" data-time="11h15-13h15">11h15-13h15</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- APRÈS-MIDI -------------------------------------------------------- -->
-    <table class="schedule-table">
-        <thead>
-            
-        </thead>
-        <tbody>
-            <tr class="subject-row">
-                <td class="row-label">📖 Sujet</td>
-                <td class="clickable-cell" data-subject="Équations et Inéquations">Équations&nbsp;&amp;&nbsp;Inéquations</td>
-                <td class="clickable-cell" data-subject="Calcul Vectoriel">Calcul&nbsp;Vectoriel</td>
-                <td class="clickable-cell" data-subject="Trigonométrie">Trigonométrie</td>
-                <td class="clickable-cell" data-subject="Logarithmes et Exponentielles">Logarithmes&nbsp;&amp;&nbsp;Exponentielles</td>
-                <td class="clickable-cell" data-subject="Les dérivées">Les&nbsp;dérivées</td>
-                <td class="clickable-cell" data-subject="Statistiques et Pourcentages">Statistiques&nbsp;&amp;&nbsp;Pourcentages</td>
-                <td class="phantom">&nbsp;</td><!-- cellule fantôme -->
-            </tr>
-            <tr class="preparation-row">
-                <td class="row-label">🎯 À préparer pour:</td>
-                <td class="clickable-cell" data-wooflash="2">Wooflash&nbsp;2</td>
-                <td class="clickable-cell" data-wooflash="4">Wooflash&nbsp;4</td>
-                <td class="clickable-cell" data-wooflash="6">Wooflash&nbsp;6</td>
-                <td class="clickable-cell" data-wooflash="8">Wooflash&nbsp;8</td>
-                <td class="clickable-cell" data-wooflash="10">Wooflash&nbsp;10</td>
-                <td class="clickable-cell" data-wooflash="12">Wooflash&nbsp;12</td>
-                <td class="phantom">&nbsp;</td>
-            </tr>
-            <tr class="questionnaire-row">
-                <td class="row-label">❓ Questions à traiter:</td>
-                <td class="clickable-cell" data-questionnaire="2">Questionnaire&nbsp;2</td>
-                <td class="clickable-cell" data-questionnaire="4">Questionnaire&nbsp;4</td>
-                <td class="clickable-cell" data-questionnaire="6">Questionnaire&nbsp;6</td>
-                <td class="clickable-cell" data-questionnaire="8">Questionnaire&nbsp;8</td>
-                <td class="clickable-cell" data-questionnaire="10">Questionnaire&nbsp;10</td>
-                <td class="clickable-cell" data-questionnaire="12">Questionnaire&nbsp;12</td>
-                <td class="phantom">&nbsp;</td>
-            </tr>
-            <tr class="time-row">
-                <td class="row-label">🕐 Horaires de cours</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="clickable-cell" data-time="14h-16h">14h-16h</td>
-                <td class="phantom">&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
+        <div class="schedule-wrapper">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th style="width:200px;"></th>
+                        <th>Vendredi 1/8</th>
+                        <th>Samedi 2/8</th>
+                        <th>Lundi 4/8</th>
+                        <th>Mardi 5/8</th>
+                        <th>Mercredi 6/8</th>
+                        <th>Jeudi 7/8</th>
+                        <th>Vendredi 8/8</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- MATIN -->
+                    <tr class="period-separator">
+                        <td colspan="8">🌅 MATIN</td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td class="row-label">📖 Sujet</td>
+                        <td class="clickable-cell" data-subject="Simplification" data-link="#">Simplification</td>
+                        <td class="clickable-cell" data-subject="Problèmes" data-link="#">Problèmes</td>
+                        <td class="clickable-cell" data-subject="Trigonométrie" data-link="#">Trigonométrie</td>
+                        <td class="clickable-cell" data-subject="Géométrie" data-link="#">Géométrie</td>
+                        <td class="clickable-cell" data-subject="Les fonctions" data-link="#">Les fonctions</td>
+                        <td class="clickable-cell" data-subject="Les intégrales" data-link="#">Les intégrales</td>
+                        <td class="clickable-cell" data-subject="Révision générale" data-link="#">Révision générale</td>
+                    </tr>
+                    <tr class="preparation-row">
+                        <td class="row-label">🎯 À préparer pour:</td>
+                        <td class="clickable-cell" data-wooflash="1" data-link="https://app.wooflash.com/join/7CZ2MUPH?from=1">Wooflash 1</td>
+                        <td class="clickable-cell" data-wooflash="3" data-link="https://app.wooflash.com/join/IV83ZALJ?from=1">Wooflash 3</td>
+                        <td class="clickable-cell" data-wooflash="5" data-link="#">Wooflash 5</td>
+                        <td class="clickable-cell" data-wooflash="7" data-link="#">Wooflash 7</td>
+                        <td class="clickable-cell" data-wooflash="9" data-link="#">Wooflash 9</td>
+                        <td class="clickable-cell" data-wooflash="11" data-link="#">Wooflash 11</td>
+                        <td class="clickable-cell" data-wooflash="13" data-link="#">Wooflash 13</td>
+                    </tr>
+                    <tr class="questionnaire-row">
+                        <td class="row-label">❓ Questions à traiter:</td>
+                        <td class="clickable-cell" data-questionnaire="1" data-link="#">Questionnaire 1</td>
+                        <td class="clickable-cell" data-questionnaire="3" data-link="#">Questionnaire 3</td>
+                        <td class="clickable-cell" data-questionnaire="5" data-link="#">Questionnaire 5</td>
+                        <td class="clickable-cell" data-questionnaire="7" data-link="#">Questionnaire 7</td>
+                        <td class="clickable-cell" data-questionnaire="9" data-link="#">Questionnaire 9</td>
+                        <td class="clickable-cell" data-questionnaire="11" data-link="#">Questionnaire 11</td>
+                        <td class="clickable-cell" data-questionnaire="13" data-link="#">Questionnaire 13</td>
+                    </tr>
+                    <tr class="time-row">
+                        <td class="row-label">🕐 Horaires de cours</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                    </tr>
+                    
+                    <!-- APRÈS-MIDI -->
+                    <tr class="period-separator">
+                        <td colspan="8">🌇 APRÈS-MIDI</td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td class="row-label">📖 Sujet</td>
+                        <td class="clickable-cell" data-subject="Équations et Inéquations" data-link="#">Équations & Inéquations</td>
+                        <td class="clickable-cell" data-subject="Calcul Vectoriel" data-link="#">Calcul Vectoriel</td>
+                        <td class="clickable-cell" data-subject="Trigonométrie" data-link="#">Trigonométrie</td>
+                        <td class="clickable-cell" data-subject="Logarithmes et Exponentielles" data-link="#">Logarithmes & Exponentielles</td>
+                        <td class="clickable-cell" data-subject="Les dérivées" data-link="#">Les dérivées</td>
+                        <td class="clickable-cell" data-subject="Statistiques et Pourcentages" data-link="#">Statistiques & Pourcentages</td>
+                        <td class="phantom"> </td>
+                    </tr>
+                    <tr class="preparation-row">
+                        <td class="row-label">🎯 À préparer pour:</td>
+                        <td class="clickable-cell" data-wooflash="2" data-link="#">Wooflash 2</td>
+                        <td class="clickable-cell" data-wooflash="4" data-link="#">Wooflash 4</td>
+                        <td class="clickable-cell" data-wooflash="6" data-link="#">Wooflash 6</td>
+                        <td class="clickable-cell" data-wooflash="8" data-link="#">Wooflash 8</td>
+                        <td class="clickable-cell" data-wooflash="10" data-link="#">Wooflash 10</td>
+                        <td class="clickable-cell" data-wooflash="12" data-link="#">Wooflash 12</td>
+                        <td class="phantom"> </td>
+                    </tr>
+                    <tr class="questionnaire-row">
+                        <td class="row-label">❓ Questions à traiter:</td>
+                        <td class="clickable-cell" data-questionnaire="2" data-link="#">Questionnaire 2</td>
+                        <td class="clickable-cell" data-questionnaire="4" data-link="#">Questionnaire 4</td>
+                        <td class="clickable-cell" data-questionnaire="6" data-link="#">Questionnaire 6</td>
+                        <td class="clickable-cell" data-questionnaire="8" data-link="#">Questionnaire 8</td>
+                        <td class="clickable-cell" data-questionnaire="10" data-link="#">Questionnaire 10</td>
+                        <td class="clickable-cell" data-questionnaire="12" data-link="#">Questionnaire 12</td>
+                        <td class="phantom"> </td>
+                    </tr>
+                    <tr class="time-row">
+                        <td class="row-label">🕐 Horaires de cours</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="phantom"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="resources-section">
             <h2 style="text-align: center; margin-bottom: 30px; color: #333; font-size: 2rem;">🎓 Ressources de Cours</h2>
             <div class="resources-grid">
                 <div class="resource-category savoirs">
                     <h3>💡 SAVOIRS</h3>
-                    <div class="resource-item" data-link="cartes-mentales">
-                        <span class="icon">🧠</span>
-                        <span class="text">Cartes mentales</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="https://lien-vers-cartes-mentales.com">
+                        <span class="icon">🧠</span><span class="text">Cartes mentales</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="classes-inversees">
-                        <span class="icon">🔄</span>
-                        <span class="text">Classes inversées</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="https://lien-vers-classes-inversees.com">
+                        <span class="icon">🔄</span><span class="text">Classes inversées</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="auto-math">
-                        <span class="icon">🤖</span>
-                        <span class="text">Auto-Math</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="https://lien-vers-auto-math.com">
+                        <span class="icon">🤖</span><span class="text">Auto-Math</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="exo-math">
-                        <span class="icon">📝</span>
-                        <span class="text">Exo-Math</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="https://lien-vers-exo-math.com">
+                        <span class="icon">📝</span><span class="text">Exo-Math</span><span class="status">✅</span>
                     </div>
                 </div>
 
                 <div class="resource-category auto-evaluations">
                     <h3>🎯 AUTO-ÉVALUATIONS</h3>
-                    <div class="resource-item" data-link="simplifications">
-                        <span class="icon">⚡</span>
-                        <span class="text">Simplifications</span>
-                        <span class="status">📊</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">⚡</span><span class="text">Simplifications</span><span class="status">📊</span>
                     </div>
-                    <div class="resource-item" data-link="problemes">
-                        <span class="icon">🔍</span>
-                        <span class="text">Problèmes</span>
-                        <span class="status">📊</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">🔍</span><span class="text">Problèmes</span><span class="status">📊</span>
                     </div>
-                    <div class="resource-item" data-link="calcul-vectoriel">
-                        <span class="icon">📐</span>
-                        <span class="text">Calcul vectoriel</span>
-                        <span class="status">📊</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📐</span><span class="text">Calcul vectoriel</span><span class="status">📊</span>
                     </div>
                 </div>
 
                 <div class="resource-category videos">
                     <h3>🎥 VIDÉOS</h3>
-                    <div class="resource-item" data-link="polynomes">
-                        <span class="icon">📹</span>
-                        <span class="text">Les polynômes</span>
-                        <span class="status">▶️</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📹</span><span class="text">Les polynômes</span><span class="status">▶</span>
                     </div>
-                    <div class="resource-item" data-link="statistiques">
-                        <span class="icon">📊</span>
-                        <span class="text">Les statistiques</span>
-                        <span class="status">▶️</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📊</span><span class="text">Les statistiques</span><span class="status">▶</span>
                     </div>
-                    <div class="resource-item" data-link="trigonometrie">
-                        <span class="icon">📐</span>
-                        <span class="text">La trigonométrie</span>
-                        <span class="status">▶️</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📐</span><span class="text">La trigonométrie</span><span class="status">▶</span>
                     </div>
-                    <div class="resource-item" data-link="integrales">
-                        <span class="icon">∫</span>
-                        <span class="text">Calcul d'intégrales</span>
-                        <span class="status">▶️</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">∫</span><span class="text">Calcul d'intégrales</span><span class="status">▶</span>
                     </div>
                 </div>
 
                 <div class="resource-category pdfs">
                     <h3>📄 PDFs</h3>
-                    <div class="resource-item" data-link="support-cours">
-                        <span class="icon">📚</span>
-                        <span class="text">Support du cours / corrigés</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📚</span><span class="text">Support du cours / corrigés</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="syllabus">
-                        <span class="icon">📖</span>
-                        <span class="text">Syllabus</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="syllabus-correctif">
-                        <span class="icon">📝</span>
-                        <span class="text">Correctif du Syllabus + Errata</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">📝</span><span class="text">Correctif du Syllabus + Errata</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="questions-integrales">
-                        <span class="icon">❓</span>
-                        <span class="text">Questions intégrales Extra</span>
-                        <span class="status">✅</span>
+                    <div class="resource-item" data-link="#">
+                        <span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span>
                     </div>
                 </div>
             </div>
@@ -534,90 +563,62 @@
 
     <div id="linkModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Lien vers la ressource</h2>
-            <p id="modalText">Cette fonctionnalité vous redirigera vers la ressource correspondante.</p>
-            <div style="margin-top: 20px;">
-                <button onclick="closeModal()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin-right: 10px; cursor: pointer;">Fermer</button>
-                <button onclick="accessResource()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Accéder</button>
+            <span class="close" onclick="closeModal()">×</span>
+            <h2 id="modalTitle">Lien non disponible</h2>
+            <p id="modalText">Il n'y a pas encore de lien pour cette ressource.</p>
+            <div class="modal-buttons">
+                <button class="modal-button close-btn" onclick="closeModal()">Fermer</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentResource = null;
+        // --- NOUVEAU CODE SIMPLIFIÉ ---
 
         // Gestion des clics sur les cellules du planning
         document.querySelectorAll('.clickable-cell').forEach(cell => {
             cell.addEventListener('click', function() {
-                const subject = this.getAttribute('data-subject');
-                const wooflash = this.getAttribute('data-wooflash');
-                const questionnaire = this.getAttribute('data-questionnaire');
-                const time = this.getAttribute('data-time');
-                
-                let title = '';
-                let text = '';
-                
-                if (subject) {
-                    title = 'Cours : ' + subject;
-                    text = 'Accéder aux ressources du cours sur ' + subject;
-                    currentResource = 'course_' + subject.replace(/\s+/g, '_').toLowerCase();
-                } else if (wooflash) {
-                    title = 'Wooflash ' + wooflash;
-                    text = 'Accéder au questionnaire Wooflash ' + wooflash;
-                    currentResource = 'wooflash_' + wooflash;
-                } else if (questionnaire) {
-                    title = 'Questionnaire ' + questionnaire;
-                    text = 'Accéder au questionnaire ' + questionnaire;
-                    currentResource = 'questionnaire_' + questionnaire;
-                } else if (time) {
-                    title = 'Lien de cours';
-                    text = 'Accéder au lien de visionnage du cours (' + time + ')';
-                    currentResource = 'course_link_' + time.replace(/[:-]/g, '');
+                // 1. On cherche un attribut 'data-link'
+                const directLink = this.getAttribute('data-link');
+
+                // 2. Si un lien existe (et n'est pas vide ou '#'), on l'ouvre.
+                if (directLink && directLink !== '#') {
+                    window.open(directLink, '_blank');
+                } else {
+                    // 3. Sinon, on affiche une fenêtre pour dire que le lien n'est pas dispo.
+                    showNoLinkModal(this.textContent);
                 }
-                
-                showModal(title, text);
             });
         });
 
-        // Gestion des clics sur les ressources
+        // Gestion des clics sur les ressources en bas de page
         document.querySelectorAll('.resource-item').forEach(item => {
             item.addEventListener('click', function() {
-                const link = this.getAttribute('data-link');
-                const text = this.querySelector('.text').textContent;
-                
-                showModal('Ressource : ' + text, 'Accéder à la ressource : ' + text);
-                currentResource = link;
+                const directLink = this.getAttribute('data-link');
+                if (directLink && directLink !== '#') {
+                    window.open(directLink, '_blank');
+                } else {
+                    const resourceText = this.querySelector('.text').textContent;
+                    showNoLinkModal(resourceText);
+                }
             });
         });
+        
+        // --- Fonctions utilitaires (inchangées ou presque) ---
 
-        function showModal(title, text) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalText').textContent = text;
+        function showNoLinkModal(resourceName) {
+            document.getElementById('modalTitle').textContent = 'Lien non disponible';
+            document.getElementById('modalText').textContent = `Il n'y a pas encore de lien pour la ressource : "${resourceName.trim()}".`;
             document.getElementById('linkModal').style.display = 'block';
         }
 
         function closeModal() {
             document.getElementById('linkModal').style.display = 'none';
-            currentResource = null;
-        }
-
-        function accessResource() {
-            if (currentResource) {
-                // Ici, vous pouvez ajouter la logique pour rediriger vers les vrais liens
-                // Par exemple :
-                // window.open('https://your-moodle-site.com/resource/' + currentResource, '_blank');
-                
-                // Pour la démonstration, on affiche une alerte
-                alert('Redirection vers : ' + currentResource + '\n\nDans Moodle, remplacez cette alerte par un vrai lien.');
-            }
-            closeModal();
         }
 
         function openForum() {
-            // Ici, vous pouvez ajouter le lien vers votre forum
-            // window.open('https://your-forum-link.com', '_blank');
-            alert('Redirection vers le forum\n\nRemplacez cette alerte par le lien vers votre forum.');
+            // Remplacez '#' par le vrai lien vers votre forum
+            window.open('#', '_blank');
         }
 
         // Fermer le modal en cliquant à l'extérieur
@@ -632,22 +633,6 @@
         window.addEventListener('load', function() {
             document.querySelector('.container').style.animation = 'fadeInUp 0.8s ease-out';
         });
-
-        // Ajouter l'animation CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
