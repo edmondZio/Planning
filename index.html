@@ -347,12 +347,14 @@
             /* Les styles à l'intérieur de ce bloc ne s'appliqueront QUE sur les écrans dont la largeur est de 768 pixels ou moins (tablettes et mobiles). */
             
             .schedule-table {
-                font-size: 0.9rem; /* Réduit la taille de la police du tableau pour que ça tienne. */
+                font-size: 0.7rem; /* Réduit la taille de la police du tableau pour que ça tienne. */
             }
             
             .schedule-table th,
             .schedule-table td {
                 padding: 8px 4px; /* Réduit l'espace intérieur des cellules. */
+                /* Permet au navigateur de couper les mots n'importe où pour éviter le débordement. */
+                word-break: break-all;
             }
             
             .header h1 {
@@ -364,13 +366,27 @@
             }
         
             .schedule-table th:first-child,
-            .schedule-table td:first-child {
-                width: 90px; /* On force une largeur plus petite, ex: 90px. MODIFIEZ cette valeur si besoin. */
-                min-width: unset; /* TRÈS IMPORTANT: on annule la règle 'min-width: 180px' qui posait problème. */
-                font-size: 0.8rem; /* Optionnel : on peut aussi réduire un peu la police des étiquettes. */
+            .schedule-table td:first-child,
+            .row-label {
+                padding-left: 5px;
+                padding-right: 5px;
+                font-size: 0.75rem;
+
+                /* On force une largeur ET on la déclare !important */
+                width: 80px !important;  /* MODIFICATION ICI : remplacez 'auto' par une valeur fixe avec !important */
+
+                min-width: unset !important;
+                word-break: normal;
+            }
+            /* === NOUVEAU CODE CORRIGÉ === */
+            .schedule-table th:not(:first-child),
+            .schedule-table td:not(:first-child) {
+                width: calc((100% - 80px) / 7);
+                
+                /* AJOUTEZ CETTE LIGNE pour réduire la police des en-têtes */
+                font-size: 0.8rem; /* Essayez 0.8rem ou 0.9rem pour trouver la taille parfaite */
             }
         }
-
         /* === ANIMATION D'ENTRÉE === */
 
         @keyframes fadeInUp {
