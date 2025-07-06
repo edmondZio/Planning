@@ -1,167 +1,228 @@
 <!DOCTYPE html>
+<!-- La déclaration DOCTYPE définit le type de document comme étant du HTML5. C'est la toute première ligne, toujours. -->
 <html lang="fr">
+<!-- La balise <html> est la racine de tout document HTML. L'attribut 'lang="fr"' indique que la langue principale de la page est le français. C'est bon pour le référencement et l'accessibilité. -->
 <head>
+    <!-- La balise <head> contient les méta-informations sur le document, qui ne sont pas affichées sur la page elle-même (comme le titre, les styles, les scripts). -->
     <meta charset="UTF-8">
+    <!-- 'charset="UTF-8"' définit l'encodage des caractères de la page. UTF-8 est standard et permet d'afficher correctement les accents et les caractères spéciaux. C'est très important. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planning Interactif des Cours - Moodle</title>
+    <!-- La balise viewport est cruciale pour le design "responsive" (adaptatif). Elle dit au navigateur (surtout sur mobile) de prendre la largeur de l'écran comme largeur de la page et de ne pas dézoomer. -->
+    <title>Planning Interactif du module 4 du cours de Mathématiques</title>
+    <!-- La balise <title> définit le titre de la page, qui apparaît dans l'onglet du navigateur. MODIFICATION : Vous pouvez changer ce texte pour qu'il corresponde à votre cours. -->
+
+    <!-- La balise <style> contient tout le code CSS. Pour un gros projet, on mettrait ce code dans un fichier séparé (.css), mais pour un seul fichier, c'est parfait. -->
     <style>
+        /* === STYLES GÉNÉRAUX === */
+
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            /* Le sélecteur '*' (appelé sélecteur universel) cible TOUS les éléments de la page. */
+            margin: 0; /* Supprime toutes les marges par défaut des éléments. */
+            padding: 0; /* Supprime tous les paddings (remplissage interne) par défaut. */
+            box-sizing: border-box; /* Une règle très utile : elle inclut le padding et la bordure dans la largeur/hauteur totale d'un élément, ce qui facilite grandement la mise en page. */
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            /* Cible la balise <body>, qui est le conteneur de tout le contenu visible de la page. */
+            font-family: 'Arial', sans-serif; /* Définit la police de caractères pour toute la page. MODIFICATION : Vous pouvez changer 'Arial' par 'Verdana', 'Helvetica', ou une police Google Fonts. 'sans-serif' est une police de secours. */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Crée un arrière-plan en dégradé.
+                                                                                MODIFICATION : 
+                                                                                - '135deg' est l'angle du dégradé. Essayez '90deg' (vertical) ou 'to right' (horizontal).
+                                                                                - '#667eea' et '#764ba2' sont les couleurs de début et de fin. Remplacez-les par les codes hexadécimaux de votre choix.
+                                                                                - Pour une couleur unie, remplacez toute la ligne par ex: 'background: #f0f2f5;' */
+            min-height: 100vh; /* Assure que le corps de la page fait au moins 100% de la hauteur de l'écran. */
+            padding: 10px; /* Ajoute un espace de 20 pixels tout autour du corps de la page. MODIFICATION : Augmentez ou diminuez cette valeur pour changer l'espace entre le bord de la fenêtre et le contenu. */
         }
 
+        /* === STRUCTURE PRINCIPALE === */
+
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            /* Cible l'élément principal qui contient tout le planning. */
+            max-width: 1500px; /* Largeur maximale du conteneur. MODIFICATION : Augmentez cette valeur pour un tableau plus large sur grand écran, ou diminuez-la. */
+            margin: 0 auto; /* Centre le conteneur horizontalement sur la page. */
+            background: white; /* Couleur de fond du conteneur. MODIFICATION : Changez 'white' par une autre couleur comme '#fafafa'. */
+            border-radius: 20px; /* Arrondit les coins du conteneur. MODIFICATION : '0px' pour des coins carrés, '30px' pour des coins plus ronds. */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* Ajoute une ombre pour donner un effet de profondeur. 
+                                                         MODIFICATION : '0 10px 20px rgba(0,0,0,0.2)' pour une ombre plus subtile. */
+            overflow: hidden; /* Empêche les éléments enfants de déborder des coins arrondis. */
         }
 
         .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            padding: 30px;
-            text-align: center;
-            color: white;
+            /* Cible la section d'en-tête en haut de la page. */
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); /* Dégradé pour l'en-tête. MODIFICATION : Changez ces couleurs pour personnaliser l'en-tête. */
+            padding: 30px; /* Espace intérieur de l'en-tête. */
+            text-align: center; /* Centre le texte. */
+            color: white; /* Couleur du texte. */
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            /* Cible le titre principal (h1) dans l'en-tête. */
+            font-size: 2rem; /* Taille de la police du titre. 'rem' est une unité relative. MODIFICATION : Essayez '3rem' pour un titre plus grand, '2.5rem' pour un plus petit. */
+            margin-bottom: 10px; /* Marge en bas du titre. */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Ombre sur le texte pour le rendre plus lisible. */
         }
 
         .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            /* Cible le sous-titre (paragraphe) dans l'en-tête. */
+            font-size: 1.1rem; /* Taille de la police. */
+            opacity: 0.9; /* Rend le texte légèrement transparent. */
+        }
+
+        /* === STYLES DU TABLEAU (PLANNING) === */
+
+        .schedule-wrapper {
+            /* Ce conteneur autour du tableau permet le défilement horizontal sur les petits écrans. */
+            overflow-x: auto; /* Affiche une barre de défilement horizontale si le contenu (le tableau) est plus large que le conteneur. */
+            padding: 20px; /* Ajoute un peu d'espace pour que le tableau ne colle pas aux bords. */
         }
 
         .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+            /* Cible le tableau lui-même. */
+            width: 100%; /* Le tableau prend toute la largeur de son parent (.schedule-wrapper). */
+            border-collapse: collapse; /* Fusionne les bordures des cellules pour un look plus propre. */
+            margin-bottom: 30px; /* Espace en dessous du tableau. */
+            font-family: Arial, sans-serif; /* Police spécifique pour le tableau. */
+            table-layout: fixed; /* La largeur des colonnes est fixée par les en-têtes ou la première ligne. */
         }
-
+        
         .schedule-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border: 2px solid #fff;
+            /* Cible les cellules d'en-tête (<th> - Vendredi 1/8, Samedi 2/8, etc.). */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Arrière-plan des en-têtes. MODIFICATION : Changez ces couleurs pour un thème différent. */
+            color: white; /* Couleur du texte des en-têtes. */
+            padding: 15px 10px; /* Espace intérieur (haut/bas, gauche/droite). */
+            text-align: center; /* Alignement du texte. */
+            font-weight: bold; /* Texte en gras. */
+            font-size: 1.1rem; /* Taille du texte. */
+            border: 2px solid #fff; /* Bordure blanche entre les en-têtes. */
         }
-
+        
         .schedule-table td {
-              padding: 12px 8px;
-              text-align: center;
-              border: 1px solid #ddd;
-              transition: all 0.3s ease;
-              word-break: break-word;
-              white-space: normal;
-              overflow-wrap: break-word;
+            /* Cible les cellules de données (<td>) du tableau. */
+            padding: 12px 8px; /* Espace intérieur. */
+            text-align: center; /* Texte centré. */
+            border: 1px solid #ddd; /* Bordure grise fine entre les cellules. MODIFICATION: Changez '#ddd' en '#ccc' pour une bordure plus visible. */
+            transition: all 0.4s ease; /* Ajoute une transition douce pour les effets de survol (hover). */
+            word-break: break-word; /* Permet aux mots longs de passer à la ligne pour ne pas déformer la cellule. */
         }
 
-        .subject-row {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        /* --- STYLES SPÉCIFIQUES AUX LIGNES DU TABLEAU --- */
+        /* Chaque type de ligne a sa propre classe pour un style unique. C'est très bien organisé. */
+
+        .subject-row { /* Ligne "Sujet et Live" */
+            background: linear-gradient(135deg, #34a0fe 0%, #009ea6 100%); /* Dégradé bleu. */
+            color: white; /* Texte blanc. */
+            font-weight: bold; /* Texte en gras. */
+        }
+
+        .preparation-row { /* Ligne "À préparer pour" */
+            background: linear-gradient(135deg, #25b354 0%, #22b499 100%); /* Dégradé vert. */
+            color: white;
+        }
+
+        .questionnaire-row { /* Ligne "Questions à traiter" */
+            background: linear-gradient(135deg, #de4674 0%, #d4b81c 100%); /* Dégradé rose/jaune. */
+            color: white;
+        }
+
+        .time-row { /* Ligne "Horaires" */
+            background: linear-gradient(135deg, #64bcb6 0%, #d18da3 100%); /* Dégradé pastel. */
+            color: #333; /* Texte foncé pour un meilleur contraste. */
+        }
+
+        .period-separator { /* Ligne "MATIN" / "APRÈS-MIDI" */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Même couleur que les en-têtes. */
             color: white;
             font-weight: bold;
+            text-align: center;
+            padding: 10px;
         }
 
-        .preparation-row {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-        }
-
-        .questionnaire-row {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-        }
-
-        .time-row {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-        }
+        /* --- STYLES SPÉCIFIQUES AUX CELLULES DU TABLEAU --- */
 
         .row-label {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Cible la première cellule de chaque ligne (ex: "📖 Sujet et Live"). */
+            background: linear-gradient(135deg, #764ba2 100%, #667eea 0%); /* Même couleur que les en-têtes pour la cohérence. */
             color: white;
             font-weight: bold;
-            text-align: left;
-            padding: 12px 10px;
-            min-width: 180px;
+            text-align: left; /* Texte aligné à gauche pour les étiquettes. */
+            min-width: 180px; /* Largeur minimale. MODIFICATION : Ajustez si vos étiquettes sont plus longues ou plus courtes. */
         }
 
         .clickable-cell {
-            padding: 10px 8px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            word-break: keep-all;
-            overflow-wrap: break-word;
-            hyphens: none;
-            position: relative;
-        }
-
-        .time-cell {
-            background: #fefcbf;
-            color: #d69e2e;
-            font-weight: 600;
-            padding: 10px 8px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
+            /* Cible toutes les cellules qui doivent être cliquables. */
+            cursor: pointer; /* Change le curseur en une main pour indiquer qu'on peut cliquer. */
+            position: relative; /* Nécessaire pour positionner l'icône de lien (voir ci-dessous). */
+            transition: all 0.4s ease; /* Animation douce pour les effets. */
         }
 
         .clickable-cell:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            filter: brightness(1.1);
+            /* Style appliqué quand la souris passe sur une cellule cliquable. */
+            transform: translateY(-3px); /* Fait "monter" légèrement la cellule. */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6); /* Ajoute une ombre plus prononcée. */
+            filter: brightness(1.2); /* Augmente légèrement la luminosité. */
         }
 
         .clickable-cell[data-link]:not([data-link=""])::after {
-            content: "🔗";
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.8rem;
-            opacity: 0.7;
+            /* Sélecteur avancé qui ajoute une icône de lien. Décortiquons-le :
+               - .clickable-cell[data-link] : Cible les cellules qui ont l'attribut 'data-link'.
+               - :not([data-link=""]) : ...mais PAS celles où l'attribut est vide.
+               - ::after : Crée un pseudo-élément à la fin du contenu de la cellule. */
+            content: "🔗"; /* Le contenu à ajouter. MODIFICATION : Vous pouvez utiliser un autre emoji ou du texte. */
+            position: absolute; /* Permet de le placer précisément par rapport à la cellule (qui est en 'position: relative'). */
+            top: 5px; /* Distance du haut. */
+            right: 5px; /* Distance de la droite. */
+            font-size: 0.8rem; /* Taille de l'icône. */
+            opacity: 0.7; /* Légèrement transparent. */
         }
 
+        .time-cell {
+            /* Style pour les cellules d'horaires. */
+            /*background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); /* Dégradé pastel. */
+            /*color: #333; /* Texte foncé pour un meilleur contraste. */
+            /*background: #fefcbf;  Fond jaune pâle. */
+            /*color: #d69e2e;  Texte ocre. */
+            font-weight: 600; /* Texte un peu plus gras. */
+        }
+        
+        .phantom {
+            /* Classe pour les cellules vides de l'après-midi, pour garder l'alignement. */
+            visibility: hidden; /* Rend la cellule invisible mais elle occupe toujours son espace. */
+        }
+
+        /* === SECTION RESSOURCES (en bas de page) === */
+
         .resources-section {
-            background: #f8f9fa;
-            padding: 30px;
+            background: #f8f9fa; /* Fond gris très clair pour cette section. */
+            padding: 30px; /* Espace intérieur. */
         }
 
         .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            /* Conteneur pour les catégories de ressources. */
+            display: grid; /* Utilise le système de grille CSS, très puissant pour les mises en page. */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* MAGIE DU RESPONSIVE :
+                                                                           - 'repeat(auto-fit, ...)' : Crée autant de colonnes que possible sur une ligne.
+                                                                           - 'minmax(300px, 1fr)' : Chaque colonne fera AU MINIMUM 300px de large. S'il y a de la place en plus, elle s'étirera ('1fr') pour occuper l'espace disponible. C'est génial pour s'adapter à toutes les tailles d'écran sans media queries.
+                                                                           MODIFICATION : Changez '300px' si vous voulez des blocs plus larges ou plus étroits. */
+            gap: 20px; /* Espace entre les blocs de la grille. */
             margin-top: 20px;
         }
 
         .resource-category {
+            /* Style pour chaque bloc de catégorie (Savoirs, Vidéos, etc.). */
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 15px; /* Coins arrondis. */
+            padding: 20px; /* Espace intérieur. */
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease; /* Animation douce. */
         }
 
         .resource-category:hover {
-            transform: translateY(-5px);
+            /* Effet au survol. */
+            transform: translateY(-5px); /* Le bloc remonte un peu. */
         }
 
         .resource-category h3 {
+            /* Style pour les titres des catégories (ex: "💡 SAVOIRS"). */
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -170,73 +231,57 @@
             font-size: 1.3rem;
         }
 
-        .savoirs h3 {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-        }
-
-        .auto-evaluations h3 {
-            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-        }
-
-        .videos h3 {
-            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
-        }
-
-        .pdfs h3 {
-            background: linear-gradient(135deg, #d31027 0%, #ea384d 100%);
-        }
+        /* Couleurs spécifiques pour chaque titre de catégorie. MODIFICATION : Changez ces dégradés pour correspondre à votre charte graphique. */
+        .savoirs h3 { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); }
+        .auto-evaluations h3 { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
+        .videos h3 { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+        .pdfs h3 { background: linear-gradient(135deg, #d31027 0%, #ea384d 100%); }
 
         .resource-item {
-            display: flex;
-            align-items: center;
+            /* Style pour chaque ligne de ressource individuelle (ex: "Cartes mentales"). */
+            display: flex; /* Aligne les éléments (icône, texte, statut) sur une ligne. */
+            align-items: center; /* Centre verticalement les éléments. */
             padding: 12px;
             margin: 8px 0;
             background: #f8f9fa;
             border-radius: 8px;
-            cursor: pointer;
+            cursor: pointer; /* Curseur main. */
             transition: all 0.3s ease;
-            position: relative;
+            position: relative; /* Pour l'icône de lien. */
         }
         
+        /* Même logique que pour les cellules du tableau, pour ajouter une icône de lien. */
         .resource-item[data-link]:not([data-link=""])::after {
             content: "🔗";
             position: absolute;
             top: 50%;
             right: 15px;
-            transform: translateY(-50%);
+            transform: translateY(-50%); /* Technique pour centrer verticalement un élément en position absolue. */
             font-size: 1rem;
             opacity: 0.7;
         }
 
         .resource-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
+            background: #e9ecef; /* Changement de couleur au survol. */
+            transform: translateX(5px); /* Léger décalage vers la droite. */
         }
 
-        .resource-item .icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
+        /* Éléments à l'intérieur d'un .resource-item */
+        .resource-item .icon { margin-right: 10px; font-size: 1.2rem; }
+        .resource-item .text { flex: 1; font-weight: 500; } /* 'flex: 1' fait que le texte prend tout l'espace restant. */
+        .resource-item .status { margin-left: 10px; font-size: 1.2rem; }
 
-        .resource-item .text {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .resource-item .status {
-            margin-left: 10px;
-            font-size: 1.2rem;
-        }
-
+        /* === BOUTON FLOTTANT (FORUM) === */
+        
         .forum-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
+            position: fixed; /* L'élément est "fixé" par rapport à la fenêtre du navigateur. Il ne bouge pas quand on fait défiler la page. */
+            bottom: 30px; /* Distance du bas de la fenêtre. */
+            right: 30px; /* Distance de la droite de la fenêtre. */
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
+            border: none; /* Pas de bordure. */
             padding: 15px 25px;
-            border-radius: 50px;
+            border-radius: 50px; /* Pour un bouton complètement rond sur les côtés. */
             font-size: 1.1rem;
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -244,148 +289,117 @@
         }
 
         .forum-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            transform: translateY(-3px); /* Remonte un peu. */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); /* Ombre plus forte. */
         }
-
+        
+        /* === MODAL (FENÊTRE POP-UP) === */
+        
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
+            display: none; /* Par défaut, la fenêtre est cachée. Le JavaScript la rendra visible. */
+            position: fixed; /* Reste fixe à l'écran. */
+            z-index: 1000; /* Se place au-dessus de tout le reste. */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.5); /* Fond noir semi-transparent. */
         }
 
         .modal-content {
+            /* Le contenu de la fenêtre pop-up. */
             background-color: white;
-            margin: 15% auto;
+            margin: 15% auto; /* '15%' du haut, et 'auto' pour centrer horizontalement. */
             padding: 30px;
             border-radius: 15px;
-            width: 80%;
-            max-width: 500px;
+            width: 80%; /* Prend 80% de la largeur de l'écran. */
+            max-width: 500px; /* Mais pas plus de 500px de large. */
             text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .close {
+        .close { /* La petite croix pour fermer. */
             color: #aaa;
-            float: right;
+            float: right; /* La place à droite. */
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s ease;
         }
 
-        .close:hover {
-            color: #000;
-        }
-
-        .period-separator {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-        }
-
-        .phantom {
-            visibility: hidden;
-        }
-
-        .schedule-wrapper {
-            overflow-x: auto;
-            padding: 20px;
-        }
-
-        .schedule-table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            font-family: Arial, sans-serif;
-        }
-
-        .schedule-table th,
-        .schedule-table td {
-            width: 14%;
-            border: 1px solid #ccc;
-            padding: 8px 6px;
-            text-align: center;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .schedule-table th:first-child,
-        .schedule-table td:first-child {
-            width: 10%;
-            text-align: left;
-        }
-
-        .modal-buttons {
-            margin-top: 20px;
-        }
-
-        .modal-button {
+        .close:hover { color: #000; }
+        
+        .modal-buttons { margin-top: 20px; }
+        .modal-button { /* Style de base pour les boutons dans la pop-up. */
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            transition: all 0.3s ease;
         }
-
-        .modal-button.close-btn {
+        .modal-button.close-btn { /* Style spécifique pour le bouton "Fermer". */
             background: #6c757d;
             color: white;
-            margin-right: 10px;
         }
-        
+
+        /* === RESPONSIVE DESIGN (Adaptation aux petits écrans) === */
+
         @media (max-width: 768px) {
+            /* Les styles à l'intérieur de ce bloc ne s'appliqueront QUE sur les écrans dont la largeur est de 768 pixels ou moins (tablettes et mobiles). */
+            
             .schedule-table {
-                font-size: 0.9rem;
+                font-size: 0.9rem; /* Réduit la taille de la police du tableau pour que ça tienne. */
             }
             
             .schedule-table th,
             .schedule-table td {
-                padding: 8px 4px;
+                padding: 8px 4px; /* Réduit l'espace intérieur des cellules. */
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 2rem; /* Réduit la taille du titre principal. */
             }
             
             .resources-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Force les blocs de ressources à se mettre sur une seule colonne, les uns en dessous des autres. */
             }
         }
 
+        /* === ANIMATION D'ENTRÉE === */
+
         @keyframes fadeInUp {
+            /* Définit une animation nommée 'fadeInUp'. */
             from {
-                opacity: 0;
-                transform: translateY(30px);
+                /* État de départ de l'animation. */
+                opacity: 0; /* Complètement transparent. */
+                transform: translateY(30px); /* Positionné 30px plus bas que sa position finale. */
             }
             to {
-                opacity: 1;
-                transform: translateY(0);
+                /* État final de l'animation. */
+                opacity: 1; /* Complètement opaque. */
+                transform: translateY(0); /* À sa position normale. */
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Le <body> contient tout le contenu visible de la page. -->
+
+    <div class="container" style="animation: fadeInUp 0.8s ease-out;">
+        <!-- Le conteneur principal. L'animation 'fadeInUp' définie en CSS est appliquée ici. -->
         <div class="header">
+            <!-- MODIFICATION : Changez les textes ici pour votre cours. -->
             <h1>📚 Planning du module 4 du cours de mathématiques</h1>
-            <p>Cliquez sur les éléments pour accéder aux ressources</p>
+            <p>Cliquer sur les éléments pour accéder aux ressources</p>
         </div>
 
         <div class="schedule-wrapper">
+            <!-- Wrapper pour le défilement horizontal sur mobile. -->
             <table class="schedule-table">
                 <thead>
+                    <!-- En-tête du tableau -->
                     <tr>
-                        <th style="width:200px;"></th>
+                        <!-- MODIFICATION : Changez les noms des colonnes (jours) ici. -->
+                        <th style="width:200px;"></th> <!-- Cellule vide pour aligner avec les étiquettes de ligne. Le 'width' ici aide à fixer la largeur de la première colonne. -->
                         <th>Vendredi 1/8</th>
                         <th>Samedi 2/8</th>
                         <th>Lundi 4/8</th>
@@ -396,171 +410,173 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- MATIN -->
+                    <!-- Corps du tableau, contenant toutes les données. -->
+                    
+                    <!-- SÉPARATEUR MATIN -->
                     <tr class="period-separator">
-                        <td colspan="8">🌅 MATIN</td>
+                        <td colspan="8">🌅 MATIN</td> <!-- 'colspan="8"' indique que cette cellule doit s'étendre sur 8 colonnes. -->
                     </tr>
+
+                    <!-- LIGNE SUJET MATIN -->
                     <tr class="subject-row">
-                        <td class="row-label">📖 Sujet</td>
-                        <td class="clickable-cell" data-subject="Simplification" data-link="#">Simplification</td>
-                        <td class="clickable-cell" data-subject="Problèmes" data-link="#">Problèmes</td>
-                        <td class="clickable-cell" data-subject="Trigonométrie" data-link="#">Trigonométrie</td>
-                        <td class="clickable-cell" data-subject="Géométrie" data-link="#">Géométrie</td>
-                        <td class="clickable-cell" data-subject="Les fonctions" data-link="#">Les fonctions</td>
-                        <td class="clickable-cell" data-subject="Les intégrales" data-link="#">Les intégrales</td>
-                        <td class="clickable-cell" data-subject="Révision générale" data-link="#">Révision générale</td>
+                        <td class="row-label">📖 Sujet et Live</td> <!-- Étiquette de la ligne -->
+                        <!-- Pour chaque cellule cliquable ci-dessous :
+                             - MODIFICATION : Changez le texte (ex: "Simplification") pour afficher le sujet du jour.
+                             - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' pour y mettre l'URL de la ressource. Mettez "#" si le lien n'est pas encore prêt. -->
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/834ad2f4-8898-42c7-96e5-b62d3654c453@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Simplification</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/2472bc80-b7f2-4dc8-8266-5d27d3b11f59@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Problèmes</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/69f3a178-ce86-4d6a-b3c7-4dab3ac0de26@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/8ea18990-0de6-453f-ac44-4604e4029667@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/348adfdc-3de0-48fd-a4bf-64a55244aaa3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les fonctions</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/9e2ae6fd-9f0e-48d6-97f6-fdad2e738840@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les intégrales</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/61b53f05-f7d2-4b45-aec1-7395d054bf7c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Révision générale</td>
                     </tr>
+
+                    <!-- LIGNE PRÉPARATION MATIN -->
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
-                        <td class="clickable-cell" data-wooflash="1" data-link="https://app.wooflash.com/join/7CZ2MUPH?from=1">Wooflash 1</td>
-                        <td class="clickable-cell" data-wooflash="3" data-link="https://app.wooflash.com/join/IV83ZALJ?from=1">Wooflash 3</td>
-                        <td class="clickable-cell" data-wooflash="5" data-link="#">Wooflash 5</td>
-                        <td class="clickable-cell" data-wooflash="7" data-link="#">Wooflash 7</td>
-                        <td class="clickable-cell" data-wooflash="9" data-link="#">Wooflash 9</td>
-                        <td class="clickable-cell" data-wooflash="11" data-link="#">Wooflash 11</td>
-                        <td class="clickable-cell" data-wooflash="13" data-link="#">Wooflash 13</td>
+                         <!-- MODIFICATION LIEN : Chaque cellule a un lien Wooflash. Remplacez '#' ou le lien existant par le vôtre. -->
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/7CZ2MUPH?from=1">Wooflash 1</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/IV83ZALJ?from=1">Wooflash 3</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/U1NV9TNG?from=1">Wooflash 5</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/0H0K4UIC?from=1">Wooflash 6</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/K4L1H9KJ?from=1">Wooflash 8</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/GIUA8RF7?from=1">Wooflash 10</td>
+                        <td class="phantom"> </td>
                     </tr>
+                    
+                    <!-- ... (Le même principe s'applique à toutes les autres lignes du tableau) ... -->
+
                     <tr class="questionnaire-row">
                         <td class="row-label">❓ Questions à traiter:</td>
-                        <td class="clickable-cell" data-questionnaire="1" data-link="#">Questionnaire 1</td>
-                        <td class="clickable-cell" data-questionnaire="3" data-link="#">Questionnaire 3</td>
-                        <td class="clickable-cell" data-questionnaire="5" data-link="#">Questionnaire 5</td>
-                        <td class="clickable-cell" data-questionnaire="7" data-link="#">Questionnaire 7</td>
-                        <td class="clickable-cell" data-questionnaire="9" data-link="#">Questionnaire 9</td>
-                        <td class="clickable-cell" data-questionnaire="11" data-link="#">Questionnaire 11</td>
-                        <td class="clickable-cell" data-questionnaire="13" data-link="#">Questionnaire 13</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/psg1p121JS">Questionnaire 1</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/s5auFKw7dk">Questionnaire 3</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/qEFw0Qqith">Questionnaire 5</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/TZBEGAWSV8">Questionnaire 6</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/KxLfh3CkaT">Questionnaire 8</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/JRSsnsVvFM">Questionnaire 10</td>
+                        <td class="phantom"> </td>
                     </tr>
                     <tr class="time-row">
                         <td class="row-label">🕐 Horaires de cours</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
-                        <td class="time-cell" data-time="11h15-13h15">11h15-13h15</td>
+                        <!-- MODIFICATION : Changez les horaires ici. -->
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">11h15-13h15</td>
                     </tr>
                     
-                    <!-- APRÈS-MIDI -->
+                    <!-- SÉPARATEUR APRÈS-MIDI -->
                     <tr class="period-separator">
                         <td colspan="8">🌇 APRÈS-MIDI</td>
                     </tr>
                     <tr class="subject-row">
-                        <td class="row-label">📖 Sujet</td>
-                        <td class="clickable-cell" data-subject="Équations et Inéquations" data-link="#">Équations & Inéquations</td>
-                        <td class="clickable-cell" data-subject="Calcul Vectoriel" data-link="#">Calcul Vectoriel</td>
-                        <td class="clickable-cell" data-subject="Trigonométrie" data-link="#">Trigonométrie</td>
-                        <td class="clickable-cell" data-subject="Logarithmes et Exponentielles" data-link="#">Logarithmes & Exponentielles</td>
-                        <td class="clickable-cell" data-subject="Les dérivées" data-link="#">Les dérivées</td>
-                        <td class="clickable-cell" data-subject="Statistiques et Pourcentages" data-link="#">Statistiques & Pourcentages</td>
-                        <td class="phantom"> </td>
+                        <td class="row-label">📖 Sujet et Live</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/2314eba5-68ed-4a2f-b3fe-804e1c554f31@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Équations & Inéquations</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/585cec59-91b2-469b-b1d4-dc3627b93072@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Calcul Vectoriel</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/7570218e-dfca-41ff-b89d-b39e62ceff76@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/c1b7a393-62d1-4901-b600-28ecc2724748@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Logarithmes & Exponentielles</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/9aefe637-597c-49b3-a801-8db3e102024c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les dérivées</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/06e38a07-65a4-4dcf-898a-d146f018ea98@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Statistiques & Pourcentages</td>
+                        <td class="phantom"> </td> <!-- Cellule vide et invisible pour la mise en page -->
                     </tr>
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
-                        <td class="clickable-cell" data-wooflash="2" data-link="#">Wooflash 2</td>
-                        <td class="clickable-cell" data-wooflash="4" data-link="#">Wooflash 4</td>
-                        <td class="clickable-cell" data-wooflash="6" data-link="#">Wooflash 6</td>
-                        <td class="clickable-cell" data-wooflash="8" data-link="#">Wooflash 8</td>
-                        <td class="clickable-cell" data-wooflash="10" data-link="#">Wooflash 10</td>
-                        <td class="clickable-cell" data-wooflash="12" data-link="#">Wooflash 12</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/ZT62PTEO?from=1">Wooflash 2</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/95K0HV2E?from=1">Wooflash 4</td>
+                        <td class="phantom"> </td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/R707WSKB?from=1">Wooflash 7</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/SDG6219W?from=1">Wooflash 9</td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/TQSMIQ4X?from=1">Wooflash 11</td>
                         <td class="phantom"> </td>
                     </tr>
                     <tr class="questionnaire-row">
                         <td class="row-label">❓ Questions à traiter:</td>
-                        <td class="clickable-cell" data-questionnaire="2" data-link="#">Questionnaire 2</td>
-                        <td class="clickable-cell" data-questionnaire="4" data-link="#">Questionnaire 4</td>
-                        <td class="clickable-cell" data-questionnaire="6" data-link="#">Questionnaire 6</td>
-                        <td class="clickable-cell" data-questionnaire="8" data-link="#">Questionnaire 8</td>
-                        <td class="clickable-cell" data-questionnaire="10" data-link="#">Questionnaire 10</td>
-                        <td class="clickable-cell" data-questionnaire="12" data-link="#">Questionnaire 12</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/Xkrt0A3SJr">Questionnaire 2</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/7ic0p6LMvb">Questionnaire 4</td>
+                        <td class="phantom"> </td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/JNPGs6wRzu">Questionnaire 7</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/acSEmjbRqd">Questionnaire 9</td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/YZxNtjecpa">Questionnaire 11</td>
                         <td class="phantom"> </td>
                     </tr>
                     <tr class="time-row">
                         <td class="row-label">🕐 Horaires de cours</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
-                        <td class="time-cell" data-time="14h-16h">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
+                        <td class="time-cell">14h-16h</td>
                         <td class="phantom"> </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- SECTION DES RESSOURCES -->
         <div class="resources-section">
             <h2 style="text-align: center; margin-bottom: 30px; color: #333; font-size: 2rem;">🎓 Ressources de Cours</h2>
             <div class="resources-grid">
+                
+                <!-- CATÉGORIE SAVOIRS -->
                 <div class="resource-category savoirs">
                     <h3>💡 SAVOIRS</h3>
-                    <div class="resource-item" data-link="https://lien-vers-cartes-mentales.com">
+                    <!-- Pour chaque ressource :
+                         - MODIFICATION : Changez l'icône, le texte et le statut.
+                         - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' avec le bon URL. -->
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/lightboxgallery/view.php?id=7644">
                         <span class="icon">🧠</span><span class="text">Cartes mentales</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="https://lien-vers-classes-inversees.com">
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/folder/view.php?id=7643">
                         <span class="icon">🔄</span><span class="text">Classes inversées</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="https://lien-vers-auto-math.com">
+                    <div class="resource-item" data-link="https://www.auto-math.be/">
                         <span class="icon">🤖</span><span class="text">Auto-Math</span><span class="status">✅</span>
                     </div>
-                    <div class="resource-item" data-link="https://lien-vers-exo-math.com">
+                    <div class="resource-item" data-link="https://exomath.info.ucl.ac.be/syllabus/functions-series/index.html#">
                         <span class="icon">📝</span><span class="text">Exo-Math</span><span class="status">✅</span>
                     </div>
                 </div>
 
+                <!-- AUTRES CATÉGORIES (même principe) -->
                 <div class="resource-category auto-evaluations">
                     <h3>🎯 AUTO-ÉVALUATIONS</h3>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">⚡</span><span class="text">Simplifications</span><span class="status">📊</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">🔍</span><span class="text">Problèmes</span><span class="status">📊</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📐</span><span class="text">Calcul vectoriel</span><span class="status">📊</span>
-                    </div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7767"><span class="icon">⚡</span><span class="text">Simplifications</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7768"><span class="icon">🔍</span><span class="text">Problèmes</span><span class="status">📊</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/quiz/view.php?id=7781"><span class="icon">📐</span><span class="text">Calcul vectoriel</span><span class="status">📊</span></div>
                 </div>
 
                 <div class="resource-category videos">
                     <h3>🎥 VIDÉOS</h3>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📹</span><span class="text">Les polynômes</span><span class="status">▶</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📊</span><span class="text">Les statistiques</span><span class="status">▶</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📐</span><span class="text">La trigonométrie</span><span class="status">▶</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">∫</span><span class="text">Calcul d'intégrales</span><span class="status">▶</span>
-                    </div>
+                    <div class="resource-item" data-link="https://youtu.be/dSvYmeVsdm4?t=1561"><span class="icon">📹</span><span class="text">Les polynômes</span><span class="status">▶</span></div>
+                    <div class="resource-item" data-link="https://youtu.be/ya_9GrdxUTQ"><span class="icon">📊</span><span class="text">Les statistiques</span><span class="status">▶</span></div>
+                    <div class="resource-item" data-link="https://www.youtube.com/watch?v=y2uRnMtDeVU"><span class="icon">📐</span><span class="text">La trigonométrie</span><span class="status">▶</span></div>
+                    <div class="resource-item" data-link="https://youtube.com/live/0_2eIXx3QYE"><span class="icon">∫</span><span class="text">Calcul d'intégrales</span><span class="status">▶</span></div>
                 </div>
 
                 <div class="resource-category pdfs">
                     <h3>📄 PDFs</h3>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📚</span><span class="text">Support du cours / corrigés</span><span class="status">✅</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">📝</span><span class="text">Correctif du Syllabus + Errata</span><span class="status">✅</span>
-                    </div>
-                    <div class="resource-item" data-link="#">
-                        <span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span>
-                    </div>
+                    <div class="resource-item" data-link="#"><span class="icon">📚</span><span class="text">Support du cours / corrigés</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://aidealareussite.uclouvain.be/mod/hvp/view.php?id=7893"><span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/ESvntnKUnoRCjhRriCk3rb8BdSw0QpgMggODmm7WHA7T2g?e=sQHBS6"><span class="icon">📝</span><span class="text">Correctif du Syllabus + Errata</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/ET93Emn3VZ9Lol1Q1IaEL10BFGnnYFCS1vSiyiGFkGtkqQ?e=afCy5A"><span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span></div>
                 </div>
+
             </div>
         </div>
     </div>
 
+    <!-- BOUTON FLOTTANT -->
     <button class="forum-button" onclick="openForum()">
         <span style="margin-right: 10px;">💬</span>
         FORUM
     </button>
 
+    <!-- FENÊTRE MODALE (cachée par défaut) -->
     <div id="linkModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">×</span>
@@ -572,67 +588,86 @@
         </div>
     </div>
 
+    <!-- La balise <script> contient le code JavaScript. On la place généralement à la fin du <body> pour que la page HTML se charge en premier. -->
     <script>
-        // --- NOUVEAU CODE SIMPLIFIÉ ---
+        // Ce script gère toute l'interactivité de la page.
 
-        // Gestion des clics sur les cellules du planning
+        // --- GESTION DES CLICS SUR LES CELLULES DU PLANNING ---
+
+        // 1. On sélectionne TOUTES les cellules qui ont la classe '.clickable-cell'.
         document.querySelectorAll('.clickable-cell').forEach(cell => {
+            // 2. Pour chaque cellule trouvée, on ajoute un "écouteur d'événement" qui attend un clic.
             cell.addEventListener('click', function() {
-                // 1. On cherche un attribut 'data-link'
-                const directLink = this.getAttribute('data-link');
+                // 3. Quand un clic se produit, ce code s'exécute.
+                // 'this' fait référence à la cellule qui a été cliquée.
+                const directLink = this.getAttribute('data-link'); // On récupère la valeur de l'attribut 'data-link' (l'URL).
 
-                // 2. Si un lien existe (et n'est pas vide ou '#'), on l'ouvre.
+                // 4. On vérifie si le lien existe et n'est pas vide ou juste '#'.
                 if (directLink && directLink !== '#') {
+                    // Si le lien est valide, on l'ouvre dans un nouvel onglet.
                     window.open(directLink, '_blank');
                 } else {
-                    // 3. Sinon, on affiche une fenêtre pour dire que le lien n'est pas dispo.
-                    showNoLinkModal(this.textContent);
+                    // Sinon, on appelle la fonction pour afficher la fenêtre modale (pop-up).
+                    showNoLinkModal(this.textContent); // On passe le texte de la cellule (ex: "Simplification").
                 }
             });
         });
 
-        // Gestion des clics sur les ressources en bas de page
+        // --- GESTION DES CLICS SUR LES RESSOURCES EN BAS DE PAGE ---
+        // Le principe est exactement le même que pour les cellules du planning.
+
         document.querySelectorAll('.resource-item').forEach(item => {
             item.addEventListener('click', function() {
                 const directLink = this.getAttribute('data-link');
                 if (directLink && directLink !== '#') {
                     window.open(directLink, '_blank');
                 } else {
+                    // Petite différence ici : on cherche le texte à l'intérieur de la balise avec la classe '.text'.
                     const resourceText = this.querySelector('.text').textContent;
                     showNoLinkModal(resourceText);
                 }
             });
         });
         
-        // --- Fonctions utilitaires (inchangées ou presque) ---
+        // --- FONCTIONS UTILITAIRES ---
 
+        /**
+         * Affiche la fenêtre modale (pop-up) pour indiquer qu'un lien est manquant.
+         * @param {string} resourceName - Le nom de la ressource cliquée.
+         */
         function showNoLinkModal(resourceName) {
+            // On modifie le contenu de la fenêtre modale avec les informations de la ressource.
             document.getElementById('modalTitle').textContent = 'Lien non disponible';
-            document.getElementById('modalText').textContent = `Il n'y a pas encore de lien pour la ressource : "${resourceName.trim()}".`;
+            document.getElementById('modalText').textContent = `Il n'y a pas encore de lien pour la ressource : "${resourceName.trim()}".`; // .trim() enlève les espaces superflus.
+            // On affiche la fenêtre modale en changeant son style CSS 'display'.
             document.getElementById('linkModal').style.display = 'block';
         }
 
+        /**
+         * Cache la fenêtre modale.
+         */
         function closeModal() {
             document.getElementById('linkModal').style.display = 'none';
         }
 
+        /**
+         * Ouvre le lien du forum.
+         */
         function openForum() {
-            // Remplacez '#' par le vrai lien vers votre forum
+            // MODIFICATION LIEN : Remplacez '#' par le vrai lien vers votre forum.
             window.open('#', '_blank');
         }
 
-        // Fermer le modal en cliquant à l'extérieur
+        // --- GESTION DES CLICS EN DEHORS DE LA MODALE ---
+
+        // Permet de fermer la fenêtre modale si on clique sur le fond noir semi-transparent.
         window.onclick = function(event) {
             const modal = document.getElementById('linkModal');
+            // Si l'élément cliqué (event.target) est la modale elle-même (le fond noir), alors on la ferme.
             if (event.target == modal) {
                 closeModal();
             }
         }
-
-        // Animation d'entrée
-        window.addEventListener('load', function() {
-            document.querySelector('.container').style.animation = 'fadeInUp 0.8s ease-out';
-        });
     </script>
 </body>
 </html>
