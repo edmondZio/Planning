@@ -362,6 +362,13 @@
             .resources-grid {
                 grid-template-columns: 1fr; /* Force les blocs de ressources à se mettre sur une seule colonne, les uns en dessous des autres. */
             }
+        
+            .schedule-table th:first-child,
+            .schedule-table td:first-child {
+                width: 90px; /* On force une largeur plus petite, ex: 90px. MODIFIEZ cette valeur si besoin. */
+                min-width: unset; /* TRÈS IMPORTANT: on annule la règle 'min-width: 180px' qui posait problème. */
+                font-size: 0.8rem; /* Optionnel : on peut aussi réduire un peu la police des étiquettes. */
+            }
         }
 
         /* === ANIMATION D'ENTRÉE === */
