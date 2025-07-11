@@ -186,8 +186,18 @@
         
         .phantom {
             /* Classe pour les cellules vides de l'après-midi, pour garder l'alignement. */
-            visibility: hidden; /* Rend la cellule invisible mais elle occupe toujours son espace. */
+            background: repeating-linear-gradient(
+                -45deg,
+                #f8f8f8,
+                #f8f8f8 10px,
+                #e0e0e0 10px,
+                #e0e0e0 20px
+            );
         }
+/*        .phantom {*/
+            /* Classe pour les cellules vides de l'après-midi, pour garder l'alignement. */
+/*            visibility: hidden; /* Rend la cellule invisible mais elle occupe toujours son espace. */
+/*        }*/
 
         /* === SECTION RESSOURCES (en bas de page) === */
 
@@ -452,7 +462,7 @@
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/8ea18990-0de6-453f-ac44-4604e4029667@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/348adfdc-3de0-48fd-a4bf-64a55244aaa3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les fonctions</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/9e2ae6fd-9f0e-48d6-97f6-fdad2e738840@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les intégrales</td>
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/61b53f05-f7d2-4b45-aec1-7395d054bf7c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Révision générale</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/61b53f05-f7d2-4b45-aec1-7395d054bf7c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Statistiques & Pourcentages</td>
                     </tr>
 
                     <!-- LIGNE PRÉPARATION MATIN -->
@@ -465,7 +475,7 @@
                         <td class="clickable-cell" data-link="https://app.wooflash.com/join/0H0K4UIC?from=1">Wooflash 6</td>
                         <td class="clickable-cell" data-link="https://app.wooflash.com/join/K4L1H9KJ?from=1">Wooflash 8</td>
                         <td class="clickable-cell" data-link="https://app.wooflash.com/join/GIUA8RF7?from=1">Wooflash 10</td>
-                        <td class="phantom"> </td>
+                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/TQSMIQ4X?from=1">Wooflash 11</td>
                     </tr>
                     
                     <!-- ... (Le même principe s'applique à toutes les autres lignes du tableau) ... -->
@@ -478,7 +488,7 @@
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/TZBEGAWSV8">Questionnaire 6</td>
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/KxLfh3CkaT">Questionnaire 8</td>
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/JRSsnsVvFM">Questionnaire 10</td>
-                        <td class="phantom"> </td>
+                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/YZxNtjecpa">Questionnaire 11</td>
                     </tr>
                     <tr class="time-row">
                         <td class="row-label">🕐 Horaires de cours</td>
@@ -489,7 +499,7 @@
                         <td class="time-cell">11h15-13h15</td>
                         <td class="time-cell">11h15-13h15</td>
                         <td class="time-cell">11h15-13h15</td>
-                        <td class="time-cell">11h15-13h15</td>
+                        <td class="time-cell">9h00-11h00</td>
                     </tr>
                     
                     <!-- SÉPARATEUR APRÈS-MIDI -->
@@ -503,8 +513,9 @@
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/7570218e-dfca-41ff-b89d-b39e62ceff76@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/c1b7a393-62d1-4901-b600-28ecc2724748@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Logarithmes & Exponentielles</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/9aefe637-597c-49b3-a801-8db3e102024c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les dérivées</td>
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/06e38a07-65a4-4dcf-898a-d146f018ea98@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Statistiques & Pourcentages</td>
-                        <td class="phantom"> </td> <!-- Cellule vide et invisible pour la mise en page -->
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/06e38a07-65a4-4dcf-898a-d146f018ea98@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les intégrales</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/6b0c7596-342f-42d8-92fa-d98840d3c731@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Révision générale</td>
+                        <!--<td class="phantom"> </td>  Cellule vide et invisible pour la mise en page -->
                     </tr>
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
@@ -513,7 +524,7 @@
                         <td class="phantom"> </td>
                         <td class="clickable-cell" data-link="https://app.wooflash.com/join/R707WSKB?from=1">Wooflash 7</td>
                         <td class="clickable-cell" data-link="https://app.wooflash.com/join/SDG6219W?from=1">Wooflash 9</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/TQSMIQ4X?from=1">Wooflash 11</td>
+                        <td class="phantom"> </td>
                         <td class="phantom"> </td>
                     </tr>
                     <tr class="questionnaire-row">
@@ -523,18 +534,18 @@
                         <td class="phantom"> </td>
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/JNPGs6wRzu">Questionnaire 7</td>
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/acSEmjbRqd">Questionnaire 9</td>
-                        <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/YZxNtjecpa">Questionnaire 11</td>
+                        <td class="phantom"> </td>
                         <td class="phantom"> </td>
                     </tr>
                     <tr class="time-row">
                         <td class="row-label">🕐 Horaires de cours</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="time-cell">14h-16h</td>
-                        <td class="phantom"> </td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">14h00-16h00</td>
+                        <td class="time-cell">11h15-13h15</td>
                     </tr>
                 </tbody>
             </table>
