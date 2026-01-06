@@ -62,9 +62,9 @@
   <script type="importmap">
 {
   "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
     "recharts": "https://esm.sh/recharts@^3.6.0",
     "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
   }
@@ -75,24 +75,24 @@
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
-      // IMPORTS: We explicitly force dependencies to use React 18.2.0 to prevent duplicate React instances crash
       import React, { useState, useEffect, useMemo } from 'https://esm.sh/react@18.2.0';
       import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
       import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0';
-      import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
+      import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause, Filter } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
 
       // --- CONSTANTS & DATA ---
 
       const PRESET_MODES = [
         { label: 'Pomodoro', minutes: 25 },
         { label: 'Pause Courte', minutes: 5 },
+        { label: 'Pause Longue', minutes: 15 },
         { label: 'Deep Work', minutes: 60 },
         { label: 'Révision (Exam)', minutes: 90 },
       ];
 
       const DEFAULT_SUBJECTS = [
-        { id: 'ana', label: 'Anatomie', color: 'bg-blue-500', border: 'border-blue-500' },
-        { id: 'sta', label: 'Statistiques', color: 'bg-red-500', border: 'border-red-500' },
+        { id: 'anat', label: 'Anatomie', color: 'bg-blue-500', border: 'border-blue-500' },
+        { id: 'stat', label: 'Statistiques', color: 'bg-pink-500', border: 'border-pink-500' },
       ];
 
       const COLOR_PALETTE = [
@@ -192,13 +192,13 @@
       };
 
       // --- SOUND ---
-      const SUCCESS_SOUND = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//uQZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWgAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABwBvAAAAMAAAA0gAAABAAABwAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAEABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAIABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAMABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAQABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAUABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAYABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAcABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAgABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAkABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAsABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZBAAA8AAAAA0AAAA0gAAABAAAPAAAAA0AAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+      const SUCCESS_SOUND = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//uQZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWgAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABwBvAAAAMAAAA0gAAABAAABwAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAEABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAIABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAMABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAQABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAUABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAYABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAcABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAgABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAkABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAsABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZBAAA8AAAAA0AAAA0gAAABAAAPAAAAA0AAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
       const playSuccessSound = () => {
         try {
           const audio = new Audio(SUCCESS_SOUND);
           audio.volume = 0.5;
-          audio.play();
+          audio.play().catch(e => console.log("Interaction required for audio"));
         } catch (e) {
           console.error("Audio play failed", e);
         }
@@ -284,7 +284,7 @@
         if (history.length === 0) {
           return (
             <div className="h-40 flex items-center justify-center bg-surface border border-surfaceHighlight rounded-2xl text-muted text-sm">
-              Aucun historique disponible.
+              Aucun historique disponible pour cette sélection.
             </div>
           );
         }
@@ -331,6 +331,8 @@
 
         // History UI
         const [expandedMonths, setExpandedMonths] = useState([]);
+        // New State for Filtering History
+        const [filterSubjectId, setFilterSubjectId] = useState('ALL');
 
         // --- Persistence ---
         useEffect(() => {
@@ -367,7 +369,23 @@
           let interval;
           // Tick every second if active and not paused
           if (activeSession && !activeSession.isPaused) {
-            interval = window.setInterval(() => setNow(Date.now()), 1000);
+            interval = window.setInterval(() => {
+                const currentTime = Date.now();
+                setNow(currentTime);
+
+                // --- ALARM CHECK ---
+                // Calculate elapsed time excluding pauses
+                const elapsedMS = currentTime - activeSession.startTime - (activeSession.accumulatedPauseTime || 0);
+                const targetMS = activeSession.targetDurationMinutes * 60 * 1000;
+                
+                // If we passed the target AND haven't played the alarm yet
+                if (elapsedMS >= targetMS && !activeSession.hasPlayedAlarm) {
+                    playSuccessSound();
+                    // Update session to mark alarm as played so it doesn't loop
+                    setActiveSession(prev => ({ ...prev, hasPlayedAlarm: true }));
+                }
+
+            }, 1000);
           }
           return () => clearInterval(interval);
         }, [activeSession]);
@@ -382,7 +400,8 @@
             subject: selectedSubject,
             completed: false,
             isPaused: false,
-            accumulatedPauseTime: 0
+            accumulatedPauseTime: 0,
+            hasPlayedAlarm: false // Initialize alarm flag
           });
           setView('TIMER');
           setNow(Date.now());
@@ -393,7 +412,6 @@
             
             if (activeSession.isPaused) {
                 // RESUME
-                // Add the duration of the current pause to accumulatedPauseTime
                 const currentPauseDuration = Date.now() - (activeSession.lastPauseTime || Date.now());
                 const updatedSession = {
                     ...activeSession,
@@ -402,10 +420,9 @@
                     lastPauseTime: undefined
                 };
                 setActiveSession(updatedSession);
-                setNow(Date.now()); // Force update immediately
+                setNow(Date.now()); 
             } else {
                 // PAUSE
-                // Store when we started pausing
                 const updatedSession = {
                     ...activeSession,
                     isPaused: true,
@@ -425,7 +442,6 @@
           if (!activeSession) return;
           const endTime = Date.now();
           
-          // Calculate total pause time
           let totalPause = activeSession.accumulatedPauseTime || 0;
           if (activeSession.isPaused && activeSession.lastPauseTime) {
              totalPause += (endTime - activeSession.lastPauseTime);
@@ -446,7 +462,10 @@
           setActiveSession(null);
           
           if (completed) {
-            playSuccessSound();
+            // Only play sound if it hasn't played automatically already
+            if (!activeSession.hasPlayedAlarm) {
+                playSuccessSound();
+            }
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 5000);
           }
@@ -499,13 +518,28 @@
         };
 
         // --- Stats ---
-        const completedSessions = history.filter(h => h.completed);
-        const totalMinutes = history.reduce((acc, h) => {
+        // Global XP (Always based on total history to encourage general progress)
+        const totalMinutesAll = history.reduce((acc, h) => {
              const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
              const pause = (h.accumulatedPauseTime || 0) / 60000;
              return acc + Math.max(0, raw - pause);
         }, 0);
-        
+        const { level, xp, nextLevelXp } = calculateXP(totalMinutesAll);
+        const streak = calculateStreak(history);
+
+        // Filtered Stats (For Graph and Total Time Display)
+        const filteredHistory = useMemo(() => {
+            if (filterSubjectId === 'ALL') return history;
+            return history.filter(h => h.subject?.id === filterSubjectId);
+        }, [history, filterSubjectId]);
+
+        const filteredTotalMinutes = filteredHistory.reduce((acc, h) => {
+             const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
+             const pause = (h.accumulatedPauseTime || 0) / 60000;
+             return acc + Math.max(0, raw - pause);
+        }, 0);
+
+        // Daily (Always generic)
         const todayStart = new Date();
         todayStart.setHours(0,0,0,0);
         const dailyMinutes = history
@@ -517,15 +551,12 @@
             }, 0);
         const dailyTarget = 120;
         
-        const { level, xp, nextLevelXp } = calculateXP(totalMinutes);
-        const streak = calculateStreak(history);
 
         // --- Renderers ---
 
         const renderActiveTimer = () => {
           if (!activeSession) return null;
           
-          // Calculate effective elapsed time based on pause state
           let elapsedMS = 0;
           if (activeSession.isPaused && activeSession.lastPauseTime) {
             elapsedMS = activeSession.lastPauseTime - activeSession.startTime - (activeSession.accumulatedPauseTime || 0);
@@ -796,7 +827,8 @@
         );
 
         const renderHistory = () => {
-          const groupedHistory = history.reduce((groups, session) => {
+          // Use filteredHistory for display
+          const groupedHistory = filteredHistory.reduce((groups, session) => {
             const date = new Date(session.startTime);
             const key = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
             if (!groups[key]) groups[key] = [];
@@ -812,10 +844,33 @@
 
           return (
             <div className="w-full max-w-md mx-auto animate-fade-in pb-24">
+              {/* Filter UI */}
+              <div className="mb-6 overflow-x-auto no-scrollbar">
+                <div className="flex gap-2">
+                   <button 
+                     onClick={() => setFilterSubjectId('ALL')}
+                     className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterSubjectId === 'ALL' ? 'bg-white text-surface border-white' : 'bg-surfaceHighlight text-muted border-transparent'}`}
+                   >
+                     Tous
+                   </button>
+                   {subjects.map(sub => (
+                     <button
+                       key={sub.id}
+                       onClick={() => setFilterSubjectId(sub.id)}
+                       className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterSubjectId === sub.id ? `${sub.color} text-white ${sub.border}` : 'bg-surfaceHighlight text-muted border-transparent'}`}
+                     >
+                       {sub.label}
+                     </button>
+                   ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
-                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Heures Totales</div>
-                  <div className="text-2xl font-mono font-bold text-text">{(totalMinutes / 60).toFixed(1)}</div>
+                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
+                    Heures Totales {filterSubjectId !== 'ALL' && '(Filtre)'}
+                  </div>
+                  <div className="text-2xl font-mono font-bold text-text">{(filteredTotalMinutes / 60).toFixed(1)}</div>
                 </div>
                 <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
                   <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Série (Jours)</div>
@@ -825,13 +880,15 @@
 
               <div className="bg-surface border border-surfaceHighlight rounded-xl p-4 mb-8">
                 <h3 className="text-xs font-bold text-muted uppercase tracking-wider">Activité (7 jours)</h3>
-                <HistoryChart history={history} />
+                <HistoryChart history={filteredHistory} />
               </div>
 
               <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Historique</h3>
               
-              {history.length === 0 ? (
-                <div className="text-center py-12 text-muted text-sm">Aucun historique.</div>
+              {filteredHistory.length === 0 ? (
+                <div className="text-center py-12 text-muted text-sm">
+                    {history.length > 0 ? "Aucune session pour cette matière." : "Aucun historique."}
+                </div>
               ) : (
                 sortedMonthKeys.map((month) => {
                     const sessions = groupedHistory[month];
