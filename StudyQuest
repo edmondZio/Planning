@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://lucide.dev/icons/brain-circuit.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>StudyQuest</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: '#020617', // slate-950
+              surface: '#0f172a',    // slate-900
+              surfaceHighlight: '#1e293b', // slate-800
+              primary: '#6366f1',    // indigo-500
+              primaryDark: '#4f46e5', // indigo-600
+              accent: '#8b5cf6',     // violet-500
+              success: '#10b981',    // emerald-500
+              text: '#f1f5f9',       // slate-100
+              muted: '#94a3b8',      // slate-400
+            },
+            fontFamily: {
+              sans: ['Inter', 'Segoe UI', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.3s ease-out forwards',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+
+    <!-- React & Babel for In-Browser Compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      body {
+        background-color: #020617;
+        color: #f1f5f9;
+        -webkit-tap-highlight-color: transparent;
+      }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #0f172a; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+      
+      /* Utilities */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+      // IMPORTS: We explicitly force dependencies to use React 18.2.0 to prevent duplicate React instances crash
+      import React, { useState, useEffect, useMemo } from 'https://esm.sh/react@18.2.0';
+      import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
+      import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0';
+      import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
+
+      // --- CONSTANTS & DATA ---
+
+      const PRESET_MODES = [
+        { label: 'Pomodoro', minutes: 25 },
+        { label: 'Pause Courte', minutes: 5 },
+        { label: 'Pause Longue', minutes: 15 },
+        { label: 'Deep Work', minutes: 60 },
+        { label: 'Révision (Exam)', minutes: 90 },
+      ];
+
+      const DEFAULT_SUBJECTS = [
+        { id: 'math', label: 'Maths', color: 'bg-blue-500', border: 'border-blue-500' },
+        { id: 'fr', label: 'Français', color: 'bg-indigo-500', border: 'border-indigo-500' },
+        { id: 'hist', label: 'Histoire', color: 'bg-yellow-600', border: 'border-yellow-600' },
+        { id: 'sci', label: 'Sciences', color: 'bg-emerald-500', border: 'border-emerald-500' },
+        { id: 'eng', label: 'Langues', color: 'bg-pink-500', border: 'border-pink-500' },
+      ];
+
+      const COLOR_PALETTE = [
+        { bg: 'bg-red-500', border: 'border-red-500' },
+        { bg: 'bg-orange-500', border: 'border-orange-500' },
+        { bg: 'bg-amber-500', border: 'border-amber-500' },
+        { bg: 'bg-yellow-600', border: 'border-yellow-600' },
+        { bg: 'bg-lime-500', border: 'border-lime-500' },
+        { bg: 'bg-emerald-500', border: 'border-emerald-500' },
+        { bg: 'bg-teal-500', border: 'border-teal-500' },
+        { bg: 'bg-cyan-500', border: 'border-cyan-500' },
+        { bg: 'bg-sky-500', border: 'border-sky-500' },
+        { bg: 'bg-blue-500', border: 'border-blue-500' },
+        { bg: 'bg-indigo-500', border: 'border-indigo-500' },
+        { bg: 'bg-violet-500', border: 'border-violet-500' },
+        { bg: 'bg-purple-500', border: 'border-purple-500' },
+        { bg: 'bg-fuchsia-500', border: 'border-fuchsia-500' },
+        { bg: 'bg-pink-500', border: 'border-pink-500' },
+        { bg: 'bg-rose-500', border: 'border-rose-500' },
+        { bg: 'bg-slate-500', border: 'border-slate-500' },
+      ];
+
+      const FOCUS_STAGES = [
+        { name: 'Échauffement', startMinute: 0, description: 'Préparation et concentration.', iconName: 'coffee', color: 'text-slate-400' },
+        { name: 'État de Flow', startMinute: 15, description: 'Efficacité maximale. Immersion.', iconName: 'zap', color: 'text-yellow-400' },
+        { name: 'Rétention Profonde', startMinute: 40, description: 'Ancrage des concepts.', iconName: 'brain', color: 'text-indigo-400' },
+        { name: 'Endurance Mentale', startMinute: 90, description: 'Repousser les limites. Bonus XP.', iconName: 'flame', color: 'text-orange-400' },
+      ];
+
+      const ICONS = { zap: Zap, brain: Brain, flame: Flame, coffee: Coffee, check: CheckCircle };
+
+      // --- HELPERS ---
+
+      const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+      const formatTime = (seconds) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        const pad = (n) => n.toString().padStart(2, '0');
+        return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+      };
+
+      const formatTimeOnly = (timestamp) => {
+        return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+
+      const getEstimatedEnd = (start, minutes) => {
+        const end = new Date(start + minutes * 60 * 1000);
+        return end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+
+      const calculateXP = (totalMinutes) => {
+        const xp = Math.floor(totalMinutes * 10); 
+        const XP_BASE = 600;
+        let level = 1;
+        let remainingXp = xp;
+        let requiredForNext = XP_BASE;
+
+        while (remainingXp >= requiredForNext) {
+          remainingXp -= requiredForNext;
+          level++;
+          requiredForNext = Math.floor(XP_BASE * (1 + (level * 0.1)));
+        }
+        return { level, xp: remainingXp, nextLevelXp: requiredForNext, totalXp: xp };
+      };
+
+      const calculateStreak = (history) => {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        
+        const completedDates = [...new Set(history
+            .filter(h => h.completed)
+            .map(h => {
+                const d = new Date(h.startTime);
+                d.setHours(0,0,0,0);
+                return d.getTime();
+            }))]
+            .sort((a,b) => b - a);
+            
+        if (completedDates.length === 0) return 0;
+        
+        let streak = 0;
+        let checkTime = today.getTime();
+        
+        const hasToday = completedDates.includes(checkTime);
+        const hasYesterday = completedDates.includes(checkTime - 86400000);
+        
+        if (!hasToday && !hasYesterday) return 0;
+        
+        let currentCheck = hasToday ? checkTime : checkTime - 86400000;
+        while (completedDates.includes(currentCheck)) {
+            streak++;
+            currentCheck -= 86400000;
+        }
+        return streak;
+      };
+
+      // --- SOUND ---
+      const SUCCESS_SOUND = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//uQZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWgAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABwBvAAAAMAAAA0gAAABAAABwAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAEABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAIABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAMABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAQABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAUABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAYABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAcABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAgABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAkABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAsABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZBAAA8AAAAA0AAAA0gAAABAAAPAAAAA0AAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
+      const playSuccessSound = () => {
+        try {
+          const audio = new Audio(SUCCESS_SOUND);
+          audio.volume = 0.5;
+          audio.play();
+        } catch (e) {
+          console.error("Audio play failed", e);
+        }
+      };
+
+      // --- COMPONENTS ---
+
+      const CircularTimer = ({ percentage, size = 280, strokeWidth = 12, children, isOvertime = false }) => {
+        const radius = (size - strokeWidth) / 2;
+        const circumference = radius * 2 * Math.PI;
+        const offset = circumference - (percentage * circumference);
+
+        return (
+          <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+            <svg
+              width={size}
+              height={size}
+              viewBox={`0 0 ${size} ${size}`}
+              className="transform -rotate-90 transition-all duration-300"
+            >
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                className="text-surfaceHighlight"
+              />
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                className={`transition-all duration-1000 ease-linear ${isOvertime ? 'text-orange-500' : 'text-primary'}`}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              {children}
+            </div>
+          </div>
+        );
+      };
+
+      const HistoryChart = ({ history }) => {
+        const data = useMemo(() => {
+          const last7Days = Array.from({ length: 7 }, (_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            return d;
+          }).reverse();
+
+          return last7Days.map(date => {
+            const dayStart = new Date(date.setHours(0, 0, 0, 0)).getTime();
+            const dayEnd = new Date(date.setHours(23, 59, 59, 999)).getTime();
+            
+            const daySessions = history.filter(s => 
+              s.startTime >= dayStart && s.startTime <= dayEnd
+            );
+
+            const totalMinutes = daySessions.reduce((acc, s) => {
+              const rawDuration = s.endTime ? (s.endTime - s.startTime) / 60000 : 0;
+              const pauseDuration = (s.accumulatedPauseTime || 0) / 60000;
+              return acc + Math.max(0, rawDuration - pauseDuration);
+            }, 0);
+
+            const hours = totalMinutes / 60;
+
+            return {
+              day: date.toLocaleDateString('fr-FR', { weekday: 'narrow' }),
+              fullDate: date.toLocaleDateString('fr-FR'),
+              hours: parseFloat(hours.toFixed(1)),
+              isToday: new Date().toDateString() === date.toDateString()
+            };
+          });
+        }, [history]);
+
+        if (history.length === 0) {
+          return (
+            <div className="h-40 flex items-center justify-center bg-surface border border-surfaceHighlight rounded-2xl text-muted text-sm">
+              Aucun historique disponible.
+            </div>
+          );
+        }
+
+        return (
+          <div className="h-48 w-full mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data}>
+                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} />
+                <Tooltip 
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                  itemStyle={{ color: '#f1f5f9' }}
+                  formatter={(value) => [`${value} h`, 'Temps Étude']}
+                  labelStyle={{ color: '#94a3b8', marginBottom: '0.25rem' }}
+                />
+                <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.isToday ? '#8b5cf6' : '#6366f1'} opacity={0.8} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        );
+      };
+
+      // --- MAIN APP ---
+
+      const App = () => {
+        const [activeSession, setActiveSession] = useState(null);
+        const [history, setHistory] = useState([]);
+        const [subjects, setSubjects] = useState(DEFAULT_SUBJECTS);
+        const [view, setView] = useState('TIMER');
+        const [now, setNow] = useState(Date.now());
+        const [customMinutes, setCustomMinutes] = useState('30');
+        const [selectedSubject, setSelectedSubject] = useState(DEFAULT_SUBJECTS[0]);
+        const [showConfetti, setShowConfetti] = useState(false);
+        
+        // Subject Manager
+        const [isManagingSubjects, setIsManagingSubjects] = useState(false);
+        const [newSubjectName, setNewSubjectName] = useState('');
+        const [newSubjectColor, setNewSubjectColor] = useState(COLOR_PALETTE[0]);
+
+        // History UI
+        const [expandedMonths, setExpandedMonths] = useState([]);
+
+        // --- Persistence ---
+        useEffect(() => {
+          try {
+            const savedSession = localStorage.getItem('study_session');
+            const savedHistory = localStorage.getItem('study_history');
+            const savedSubjects = localStorage.getItem('study_subjects');
+            
+            if (savedSession) setActiveSession(JSON.parse(savedSession));
+            if (savedHistory) setHistory(JSON.parse(savedHistory));
+            
+            if (savedSubjects) {
+               const loaded = JSON.parse(savedSubjects);
+               setSubjects(loaded);
+               if(loaded.length > 0) setSelectedSubject(loaded[0]);
+            }
+          } catch (e) { console.error("Load error", e); }
+        }, []);
+
+        useEffect(() => {
+          if (activeSession) localStorage.setItem('study_session', JSON.stringify(activeSession));
+          else localStorage.removeItem('study_session');
+        }, [activeSession]);
+
+        useEffect(() => {
+          localStorage.setItem('study_history', JSON.stringify(history));
+        }, [history]);
+
+        useEffect(() => {
+          localStorage.setItem('study_subjects', JSON.stringify(subjects));
+        }, [subjects]);
+
+        useEffect(() => {
+          let interval;
+          // Tick every second if active and not paused
+          if (activeSession && !activeSession.isPaused) {
+            interval = window.setInterval(() => setNow(Date.now()), 1000);
+          }
+          return () => clearInterval(interval);
+        }, [activeSession]);
+
+        // --- Actions ---
+
+        const startSession = (minutes) => {
+          setActiveSession({
+            id: generateId(),
+            startTime: Date.now(),
+            targetDurationMinutes: minutes,
+            subject: selectedSubject,
+            completed: false,
+            isPaused: false,
+            accumulatedPauseTime: 0
+          });
+          setView('TIMER');
+          setNow(Date.now());
+        };
+
+        const togglePause = () => {
+            if (!activeSession) return;
+            
+            if (activeSession.isPaused) {
+                // RESUME
+                // Add the duration of the current pause to accumulatedPauseTime
+                const currentPauseDuration = Date.now() - (activeSession.lastPauseTime || Date.now());
+                const updatedSession = {
+                    ...activeSession,
+                    isPaused: false,
+                    accumulatedPauseTime: (activeSession.accumulatedPauseTime || 0) + currentPauseDuration,
+                    lastPauseTime: undefined
+                };
+                setActiveSession(updatedSession);
+                setNow(Date.now()); // Force update immediately
+            } else {
+                // PAUSE
+                // Store when we started pausing
+                const updatedSession = {
+                    ...activeSession,
+                    isPaused: true,
+                    lastPauseTime: Date.now()
+                };
+                setActiveSession(updatedSession);
+            }
+        };
+
+        const cancelSession = () => {
+          if (window.confirm("Annuler la session ? Votre progression sera perdue.")) {
+            setActiveSession(null);
+          }
+        };
+
+        const completeSession = () => {
+          if (!activeSession) return;
+          const endTime = Date.now();
+          
+          // Calculate total pause time
+          let totalPause = activeSession.accumulatedPauseTime || 0;
+          if (activeSession.isPaused && activeSession.lastPauseTime) {
+             totalPause += (endTime - activeSession.lastPauseTime);
+          }
+
+          const durationMinutes = (endTime - activeSession.startTime - totalPause) / 60000;
+          const completed = durationMinutes >= activeSession.targetDurationMinutes;
+          
+          const finishedSession = {
+            ...activeSession, 
+            endTime, 
+            completed,
+            accumulatedPauseTime: totalPause,
+            isPaused: false
+          };
+          
+          setHistory(prev => [finishedSession, ...prev]);
+          setActiveSession(null);
+          
+          if (completed) {
+            playSuccessSound();
+            setShowConfetti(true);
+            setTimeout(() => setShowConfetti(false), 5000);
+          }
+        };
+
+        const deleteHistoryItem = (id, e) => {
+          e.stopPropagation();
+          if (window.confirm("Supprimer cet enregistrement ?")) {
+            setHistory(prev => prev.filter(h => h.id !== id));
+          }
+        };
+
+        // --- Subject Manager Logic ---
+
+        const addSubject = () => {
+            if (!newSubjectName.trim()) return;
+            const newSubject = {
+                id: generateId(),
+                label: newSubjectName.trim(),
+                color: newSubjectColor.bg,
+                border: newSubjectColor.border
+            };
+            const updated = [...subjects, newSubject];
+            setSubjects(updated);
+            setSelectedSubject(newSubject);
+            setNewSubjectName('');
+            setIsManagingSubjects(false);
+        };
+
+        const deleteSubject = (id) => {
+            if (window.confirm("Supprimer cette matière ? Les sessions passées conserveront leur étiquette.")) {
+                const updated = subjects.filter(s => s.id !== id);
+                setSubjects(updated);
+                if (selectedSubject.id === id && updated.length > 0) {
+                    setSelectedSubject(updated[0]);
+                } else if (updated.length === 0) {
+                    const fallback = { id: 'default', label: 'Général', color: 'bg-slate-500', border: 'border-slate-500' };
+                    setSubjects([fallback]);
+                    setSelectedSubject(fallback);
+                }
+            }
+        };
+
+        // --- History Logic ---
+
+        const toggleMonth = (key) => {
+            setExpandedMonths(prev => 
+                prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+            );
+        };
+
+        // --- Stats ---
+        const completedSessions = history.filter(h => h.completed);
+        const totalMinutes = history.reduce((acc, h) => {
+             const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
+             const pause = (h.accumulatedPauseTime || 0) / 60000;
+             return acc + Math.max(0, raw - pause);
+        }, 0);
+        
+        const todayStart = new Date();
+        todayStart.setHours(0,0,0,0);
+        const dailyMinutes = history
+            .filter(h => h.startTime >= todayStart.getTime())
+            .reduce((acc, h) => {
+                const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
+                const pause = (h.accumulatedPauseTime || 0) / 60000;
+                return acc + Math.max(0, raw - pause);
+            }, 0);
+        const dailyTarget = 120;
+        
+        const { level, xp, nextLevelXp } = calculateXP(totalMinutes);
+        const streak = calculateStreak(history);
+
+        // --- Renderers ---
+
+        const renderActiveTimer = () => {
+          if (!activeSession) return null;
+          
+          // Calculate effective elapsed time based on pause state
+          let elapsedMS = 0;
+          if (activeSession.isPaused && activeSession.lastPauseTime) {
+            elapsedMS = activeSession.lastPauseTime - activeSession.startTime - (activeSession.accumulatedPauseTime || 0);
+          } else {
+            elapsedMS = now - activeSession.startTime - (activeSession.accumulatedPauseTime || 0);
+          }
+
+          const elapsedSeconds = Math.floor(elapsedMS / 1000);
+          const targetSeconds = activeSession.targetDurationMinutes * 60;
+          const isOvertime = elapsedSeconds > targetSeconds;
+          const remainingSeconds = Math.max(0, targetSeconds - elapsedSeconds);
+          const displaySeconds = isOvertime ? elapsedSeconds - targetSeconds : remainingSeconds;
+          const progress = Math.min(elapsedSeconds / targetSeconds, 1);
+          
+          const elapsedMinutes = elapsedSeconds / 60;
+          let currentStage = FOCUS_STAGES[0];
+          let nextStage = null;
+          for (let i = 0; i < FOCUS_STAGES.length; i++) {
+            if (elapsedMinutes >= FOCUS_STAGES[i].startMinute) {
+              currentStage = FOCUS_STAGES[i];
+              nextStage = FOCUS_STAGES[i + 1] || null;
+            }
+          }
+          const StageIcon = ICONS[currentStage.iconName];
+          const sessionSubject = activeSession.subject || subjects[0] || DEFAULT_SUBJECTS[0];
+
+          return (
+            <div className="flex flex-col items-center w-full max-w-md mx-auto animate-fade-in pb-24">
+              <div className="w-full flex justify-between items-center mb-6">
+                <div className={`px-3 py-1 rounded-full border ${sessionSubject.border} bg-opacity-10 text-xs font-bold text-white flex items-center gap-2`}>
+                   <div className={`w-2 h-2 rounded-full ${sessionSubject.color}`}></div>
+                   {sessionSubject.label}
+                </div>
+                <button onClick={cancelSession} className="p-2 text-muted hover:text-red-400 hover:bg-white/5 rounded-full transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="mb-8 relative">
+                <CircularTimer percentage={progress} isOvertime={isOvertime}>
+                  <div className="flex flex-col items-center">
+                    <span className={`text-xs uppercase tracking-widest font-bold mb-2 ${isOvertime ? 'text-orange-500 animate-pulse' : 'text-muted'}`}>
+                      {activeSession.isPaused ? 'EN PAUSE' : (isOvertime ? 'Dépassement' : 'Restant')}
+                    </span>
+                    <span className={`text-5xl font-mono font-bold tracking-tighter mb-2 ${activeSession.isPaused ? 'text-muted' : 'text-text'}`}>
+                      {formatTime(displaySeconds)}
+                    </span>
+                    <span className="text-sm font-mono text-muted opacity-60">
+                      Écoulé: {formatTime(elapsedSeconds)}
+                    </span>
+                  </div>
+                </CircularTimer>
+              </div>
+
+              <div className="w-full flex justify-between px-8 text-sm text-muted font-mono mb-8">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] uppercase tracking-wider mb-1 opacity-50">Début</span>
+                  <span>{formatTimeOnly(activeSession.startTime)}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] uppercase tracking-wider mb-1 opacity-50">Fin Est.</span>
+                  <span className="text-text">
+                    {activeSession.isPaused 
+                        ? 'En Pause' 
+                        : getEstimatedEnd(now, (remainingSeconds / 60))
+                    }
+                  </span>
+                </div>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="w-full max-w-xs flex gap-3 mb-8">
+                <button 
+                    onClick={togglePause}
+                    className={`flex-1 py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+                        activeSession.isPaused 
+                        ? 'bg-emerald-500 text-white hover:bg-emerald-600' 
+                        : 'bg-surfaceHighlight text-muted hover:text-white hover:bg-white/10'
+                    }`}
+                >
+                    {activeSession.isPaused ? <Play size={20} fill="currentColor" /> : <Pause size={20} fill="currentColor" />}
+                    {activeSession.isPaused ? 'Reprendre' : 'Pause'}
+                </button>
+                
+                <button 
+                    onClick={completeSession}
+                    className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 active:scale-95 transition-all py-4 rounded-2xl font-bold text-lg shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2"
+                >
+                    <Square size={20} fill="currentColor" /> Terminer
+                </button>
+              </div>
+
+              <div className="w-full bg-surface border border-surfaceHighlight rounded-2xl p-5 relative overflow-hidden">
+                <div className={`absolute top-0 left-0 w-1 h-full ${currentStage.name === 'Endurance Mentale' ? 'bg-orange-500' : 'bg-primary'}`} />
+                <div className="flex items-start gap-4 relative z-10">
+                  <div className={`p-3 rounded-xl bg-surfaceHighlight ${currentStage.color}`}>
+                    <StageIcon size={24} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-text mb-1">{currentStage.name}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{currentStage.description}</p>
+                    {nextStage && (
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                        <div className="flex justify-between text-xs text-muted mb-2 font-mono">
+                          <span>Prochain: {nextStage.name}</span>
+                          <span>{(nextStage.startMinute - elapsedMinutes).toFixed(0)}m</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-background rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-primary transition-all duration-1000"
+                            style={{ width: `${Math.min(100, ((elapsedMinutes - currentStage.startMinute) / (nextStage.startMinute - currentStage.startMinute)) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const renderSubjectManager = () => (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                <div className="bg-surface border border-surfaceHighlight rounded-2xl p-6 w-full max-w-sm animate-fade-in shadow-2xl">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-bold text-text">Gérer les Matières</h2>
+                        <button onClick={() => setIsManagingSubjects(false)} className="p-2 hover:bg-surfaceHighlight rounded-full text-muted">
+                            <X size={20} />
+                        </button>
+                    </div>
+
+                    <div className="space-y-2 mb-6 max-h-60 overflow-y-auto pr-1 no-scrollbar">
+                        {subjects.map(sub => (
+                            <div key={sub.id} className="flex items-center justify-between p-3 bg-background rounded-xl border border-surfaceHighlight">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-3 h-3 rounded-full ${sub.color}`} />
+                                    <span className="text-sm font-medium">{sub.label}</span>
+                                </div>
+                                <button onClick={() => deleteSubject(sub.id)} className="text-muted hover:text-red-400 p-1">
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="border-t border-surfaceHighlight pt-4">
+                        <h3 className="text-xs font-bold text-muted uppercase tracking-wider mb-2">Ajouter une matière</h3>
+                        <input 
+                            type="text" 
+                            placeholder="Nom (ex: Géographie)" 
+                            className="w-full bg-surfaceHighlight rounded-lg p-3 text-sm mb-3 focus:outline-none focus:ring-1 focus:ring-primary text-white"
+                            value={newSubjectName}
+                            onChange={(e) => setNewSubjectName(e.target.value)}
+                        />
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            {COLOR_PALETTE.map((c, i) => (
+                                <button 
+                                    key={i}
+                                    onClick={() => setNewSubjectColor(c)}
+                                    className={`w-6 h-6 rounded-full ${c.bg} ${newSubjectColor.bg === c.bg ? 'ring-2 ring-white ring-offset-2 ring-offset-surface' : ''}`}
+                                />
+                            ))}
+                        </div>
+                        <button 
+                            onClick={addSubject}
+                            disabled={!newSubjectName.trim()}
+                            className="w-full bg-primary hover:bg-primaryDark disabled:opacity-50 text-white rounded-xl py-3 font-bold text-sm transition-colors"
+                        >
+                            Ajouter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const renderDashboard = () => (
+          <div className="w-full max-w-md mx-auto animate-fade-in pb-24">
+            
+            {/* Daily Goal Card */}
+            <div className="bg-surface border border-surfaceHighlight rounded-2xl p-4 mb-6 relative overflow-hidden">
+                <div className="flex justify-between items-center mb-3">
+                    <div className="flex items-center gap-2 text-sm font-bold text-muted">
+                        <Target size={16} /> Objectif du Jour
+                    </div>
+                    <div className="text-sm font-mono text-accent">{dailyMinutes.toFixed(0)} / {dailyTarget} min</div>
+                </div>
+                <div className="h-3 w-full bg-surfaceHighlight rounded-full overflow-hidden">
+                     <div 
+                        className="h-full bg-gradient-to-r from-success to-emerald-300 transition-all duration-1000"
+                        style={{ width: `${Math.min(100, (dailyMinutes / dailyTarget) * 100)}%` }}
+                     />
+                </div>
+                {dailyMinutes >= dailyTarget && <div className="absolute top-2 right-2 text-xl">🎉</div>}
+            </div>
+
+            {/* Subject Selector */}
+            <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-sm font-bold text-muted uppercase tracking-wider">Matière</h2>
+                    <button onClick={() => setIsManagingSubjects(true)} className="text-xs text-primary flex items-center gap-1 hover:underline">
+                        <Edit2 size={12} /> Gérer
+                    </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {subjects.map(subj => (
+                        <button
+                            key={subj.id}
+                            onClick={() => setSelectedSubject(subj)}
+                            className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                                selectedSubject?.id === subj.id 
+                                ? `bg-surfaceHighlight ${subj.border} text-white shadow-sm` 
+                                : 'border-transparent text-muted hover:bg-surfaceHighlight'
+                            }`}
+                        >
+                            <span className={`inline-block w-2 h-2 rounded-full mr-2 ${subj.color}`}></span>
+                            {subj.label}
+                        </button>
+                    ))}
+                    <button onClick={() => setIsManagingSubjects(true)} className="px-3 py-2 rounded-lg text-sm font-medium border border-dashed border-surfaceHighlight text-muted hover:text-text">
+                        <Plus size={16} />
+                    </button>
+                </div>
+            </div>
+
+            <h2 className="text-sm font-bold text-muted uppercase tracking-wider mb-3">Durée</h2>
+            <div className="grid grid-cols-1 gap-3 mb-6">
+              {PRESET_MODES.map((mode) => (
+                <button
+                  key={mode.label}
+                  onClick={() => startSession(mode.minutes)}
+                  className="flex items-center justify-between p-4 bg-surface border border-surfaceHighlight hover:border-primary/50 rounded-xl transition-all group active:scale-[0.99]"
+                >
+                  <div className="text-left">
+                    <div className="font-bold text-text group-hover:text-primary transition-colors">{mode.label}</div>
+                    <div className="text-xs text-muted font-mono">{mode.minutes} Minutes</div>
+                  </div>
+                  <div className="w-10 h-10 rounded-full bg-surfaceHighlight flex items-center justify-center text-muted group-hover:bg-primary group-hover:text-white transition-all">
+                    <Play size={18} fill="currentColor" className="ml-0.5" />
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
+              <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Durée Personnalisée (Min)</label>
+              <div className="flex gap-2">
+                <input 
+                  type="number" 
+                  value={customMinutes}
+                  onChange={(e) => setCustomMinutes(e.target.value)}
+                  className="flex-1 bg-background border border-surfaceHighlight rounded-lg px-4 text-center font-mono text-lg font-bold focus:outline-none focus:border-primary transition-colors text-white"
+                />
+                <button 
+                  onClick={() => {
+                    const m = parseInt(customMinutes);
+                    if (m > 0) startSession(m);
+                  }}
+                  className="bg-primary hover:bg-primaryDark px-6 rounded-lg font-bold text-white transition-colors"
+                >
+                  Lancer
+                </button>
+              </div>
+            </div>
+            
+            {isManagingSubjects && renderSubjectManager()}
+          </div>
+        );
+
+        const renderHistory = () => {
+          const groupedHistory = history.reduce((groups, session) => {
+            const date = new Date(session.startTime);
+            const key = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(session);
+            return groups;
+          }, {});
+          
+          const sortedMonthKeys = Object.keys(groupedHistory).sort((a, b) => {
+              const timeA = groupedHistory[a][0]?.startTime || 0;
+              const timeB = groupedHistory[b][0]?.startTime || 0;
+              return timeB - timeA;
+          });
+
+          return (
+            <div className="w-full max-w-md mx-auto animate-fade-in pb-24">
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
+                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Heures Totales</div>
+                  <div className="text-2xl font-mono font-bold text-text">{(totalMinutes / 60).toFixed(1)}</div>
+                </div>
+                <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
+                  <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Série (Jours)</div>
+                  <div className="text-2xl font-mono font-bold text-orange-400">🔥 {streak}</div>
+                </div>
+              </div>
+
+              <div className="bg-surface border border-surfaceHighlight rounded-xl p-4 mb-8">
+                <h3 className="text-xs font-bold text-muted uppercase tracking-wider">Activité (7 jours)</h3>
+                <HistoryChart history={history} />
+              </div>
+
+              <h3 className="text-sm font-bold text-muted uppercase tracking-wider mb-4">Historique</h3>
+              
+              {history.length === 0 ? (
+                <div className="text-center py-12 text-muted text-sm">Aucun historique.</div>
+              ) : (
+                sortedMonthKeys.map((month) => {
+                    const sessions = groupedHistory[month];
+                    const isExpanded = expandedMonths.includes(month);
+                    
+                    return (
+                        <div key={month} className="mb-4 bg-surface border border-surfaceHighlight rounded-2xl overflow-hidden">
+                            <button 
+                                onClick={() => toggleMonth(month)}
+                                className="w-full flex items-center justify-between p-4 hover:bg-surfaceHighlight/50 transition-colors"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-1 rounded-full bg-surfaceHighlight text-muted transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}>
+                                        <ChevronRight size={16} />
+                                    </div>
+                                    <span className="font-bold text-sm capitalize">{month}</span>
+                                </div>
+                                <span className="bg-surfaceHighlight px-2 py-0.5 rounded text-[10px] font-mono text-muted">{sessions.length}</span>
+                            </button>
+                            
+                            {isExpanded && (
+                                <div className="border-t border-surfaceHighlight bg-black/20">
+                                    {sessions.map((session) => {
+                                        const rawDuration = session.endTime ? ((session.endTime - session.startTime) / 60000) : 0;
+                                        const pauseDuration = (session.accumulatedPauseTime || 0) / 60000;
+                                        const finalDuration = Math.max(0, rawDuration - pauseDuration).toFixed(0);
+
+                                        // Fallback if subject was deleted
+                                        const sessionSubj = session.subject || { label: 'Inconnu', color: 'bg-slate-500', border: 'border-slate-500' };
+                                        
+                                        return (
+                                          <div key={session.id} className="p-4 border-b border-surfaceHighlight/50 last:border-0 hover:bg-white/5 transition-colors flex justify-between items-center group">
+                                            <div className="flex items-center gap-3">
+                                              <div className={`p-2 rounded-lg ${session.completed ? 'bg-emerald-500/10 text-emerald-500' : 'bg-orange-500/10 text-orange-500'}`}>
+                                                {session.completed ? <Trophy size={16} /> : <Zap size={16} />}
+                                              </div>
+                                              <div>
+                                                <div className="font-bold text-sm text-text flex items-center gap-2">
+                                                  {finalDuration} min 
+                                                  <span className={`text-[10px] px-1.5 py-0.5 rounded border ${sessionSubj.border} bg-opacity-20 text-muted`}>
+                                                    {sessionSubj.label}
+                                                  </span>
+                                                  {!session.completed && <span className="text-[10px] text-orange-400 border border-orange-500/30 px-1 rounded">Arrêté</span>}
+                                                </div>
+                                                <div className="text-xs text-muted">
+                                                  {new Date(session.startTime).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' })}
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <button onClick={(e) => deleteHistoryItem(session.id, e)} className="p-2 text-muted/50 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
+                                              <Trash2 size={16} />
+                                            </button>
+                                          </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    );
+                })
+              )}
+            </div>
+          );
+        };
+
+        return (
+          <div className="min-h-screen bg-background font-sans text-text selection:bg-primary/30 flex flex-col items-center">
+            {showConfetti && (
+              <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+                {[...Array(30)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className="absolute w-2 h-2 rounded bg-primary animate-pulse"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `-10px`,
+                      backgroundColor: ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b'][Math.floor(Math.random() * 4)],
+                      animation: `fadeIn 4s linear forwards`,
+                      animationDelay: `${Math.random() * 0.5}s`,
+                      transform: `translateY(${50 + Math.random() * 100}vh) rotate(${Math.random() * 360}deg)`
+                    }} 
+                  />
+                ))}
+              </div>
+            )}
+
+            <header className="w-full max-w-md sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-surfaceHighlight px-6 py-4 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Trophy size={20} className="text-white" />
+                </div>
+                <div>
+                  <h1 className="font-bold text-lg leading-none mb-1">Niveau {level}</h1>
+                  <div className="h-1.5 w-32 bg-surfaceHighlight rounded-full overflow-hidden relative">
+                    <div className="h-full bg-emerald-400" style={{ width: `${(xp / nextLevelXp) * 100}%` }} />
+                  </div>
+                  <div className="text-[10px] text-muted mt-1 font-mono">{xp} / {nextLevelXp} XP</div>
+                </div>
+              </div>
+            </header>
+
+            <main className="flex-1 w-full p-6">
+              {view === 'TIMER' ? (activeSession ? renderActiveTimer() : renderDashboard()) : renderHistory()}
+            </main>
+
+            <nav className="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-lg border-t border-surfaceHighlight px-6 py-3 z-30">
+              <div className="max-w-md mx-auto flex bg-surfaceHighlight p-1 rounded-xl">
+                <button 
+                  onClick={() => setView('TIMER')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${view === 'TIMER' ? 'bg-background text-text shadow-sm' : 'text-muted hover:text-text'}`}
+                >
+                  <Timer size={18} /> Minuteur
+                </button>
+                <button 
+                  onClick={() => setView('HISTORY')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${view === 'HISTORY' ? 'bg-background text-text shadow-sm' : 'text-muted hover:text-text'}`}
+                >
+                  <History size={18} /> Historique
+                </button>
+              </div>
+            </nav>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
