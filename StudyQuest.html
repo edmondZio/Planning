@@ -65,8 +65,8 @@
     "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "recharts": "https://esm.sh/recharts@^3.6.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "recharts": "https://esm.sh/recharts@^3.6.0"
   }
 }
 </script>
@@ -75,7 +75,7 @@
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
-      import React, { useState, useEffect, useMemo } from 'https://esm.sh/react@18.2.0';
+      import React, { useState, useEffect, useMemo, useRef } from 'https://esm.sh/react@18.2.0';
       import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
       import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0';
       import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause, Filter } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
@@ -191,16 +191,42 @@
         return streak;
       };
 
-      // --- SOUND ---
-      const SUCCESS_SOUND = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//uQZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWgAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABwBvAAAAMAAAA0gAAABAAABwAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAAAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAAABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAEABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAIABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAMABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAQABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAUABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAYABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAcABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAgABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAkABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZAsABkAvAAAAMAAAA0gAAABAAABjAAAAKAAAA0gAAABAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//uQZBAAA8AAAAA0AAAA0gAAABAAAPAAAAA0AAAA0gAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-
-      const playSuccessSound = () => {
+      // --- SOUND SYSTEM (Synth) ---
+      
+      const playAlarmSound = () => {
         try {
-          const audio = new Audio(SUCCESS_SOUND);
-          audio.volume = 0.5;
-          audio.play().catch(e => console.log("Interaction required for audio"));
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          
+          const ctx = new AudioContext();
+          
+          // Simple double beep function
+          const beep = (startTime, freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, startTime);
+            
+            // Envelope to avoid clicking
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+            
+            osc.start(startTime);
+            osc.stop(startTime + 0.5);
+          };
+
+          const now = ctx.currentTime;
+          beep(now, 880);       // High beep
+          beep(now + 0.5, 880); // High beep
+          beep(now + 1.0, 1100); // Higher finish
+          
         } catch (e) {
-          console.error("Audio play failed", e);
+          console.error("Audio synth failed", e);
         }
       };
 
@@ -270,12 +296,13 @@
               return acc + Math.max(0, rawDuration - pauseDuration);
             }, 0);
 
-            const hours = totalMinutes / 60;
+            // Use 3 decimals for precision in chart data to ensure small bars render
+            const hours = parseFloat((totalMinutes / 60).toFixed(3));
 
             return {
               day: date.toLocaleDateString('fr-FR', { weekday: 'narrow' }),
               fullDate: date.toLocaleDateString('fr-FR'),
-              hours: parseFloat(hours.toFixed(1)),
+              hours: hours,
               isToday: new Date().toDateString() === date.toDateString()
             };
           });
@@ -298,7 +325,12 @@
                   cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                   contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                   itemStyle={{ color: '#f1f5f9' }}
-                  formatter={(value) => [`${value} h`, 'Temps Étude']}
+                  formatter={(value) => {
+                    // Display friendly format in tooltip
+                    if (value < 0.02 && value > 0) return ['< 1 min', 'Temps'];
+                    if (value < 1) return [`${(value * 60).toFixed(0)} min`, 'Temps'];
+                    return [`${value.toFixed(1)} h`, 'Temps'];
+                  }}
                   labelStyle={{ color: '#94a3b8', marginBottom: '0.25rem' }}
                 />
                 <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
@@ -331,7 +363,6 @@
 
         // History UI
         const [expandedMonths, setExpandedMonths] = useState([]);
-        // New State for Filtering History
         const [filterSubjectId, setFilterSubjectId] = useState('ALL');
 
         // --- Persistence ---
@@ -380,8 +411,7 @@
                 
                 // If we passed the target AND haven't played the alarm yet
                 if (elapsedMS >= targetMS && !activeSession.hasPlayedAlarm) {
-                    playSuccessSound();
-                    // Update session to mark alarm as played so it doesn't loop
+                    playAlarmSound();
                     setActiveSession(prev => ({ ...prev, hasPlayedAlarm: true }));
                 }
 
@@ -393,6 +423,15 @@
         // --- Actions ---
 
         const startSession = (minutes) => {
+          // Initialize Audio Context on user interaction to unlock sound
+          try {
+              const AudioContext = window.AudioContext || window.webkitAudioContext;
+              if (AudioContext) {
+                  const ctx = new AudioContext();
+                  ctx.resume();
+              }
+          } catch(e) {}
+
           setActiveSession({
             id: generateId(),
             startTime: Date.now(),
@@ -401,7 +440,7 @@
             completed: false,
             isPaused: false,
             accumulatedPauseTime: 0,
-            hasPlayedAlarm: false // Initialize alarm flag
+            hasPlayedAlarm: false
           });
           setView('TIMER');
           setNow(Date.now());
@@ -462,9 +501,8 @@
           setActiveSession(null);
           
           if (completed) {
-            // Only play sound if it hasn't played automatically already
             if (!activeSession.hasPlayedAlarm) {
-                playSuccessSound();
+                playAlarmSound();
             }
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 5000);
@@ -518,7 +556,6 @@
         };
 
         // --- Stats ---
-        // Global XP (Always based on total history to encourage general progress)
         const totalMinutesAll = history.reduce((acc, h) => {
              const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
              const pause = (h.accumulatedPauseTime || 0) / 60000;
@@ -527,11 +564,24 @@
         const { level, xp, nextLevelXp } = calculateXP(totalMinutesAll);
         const streak = calculateStreak(history);
 
-        // Filtered Stats (For Graph and Total Time Display)
+        // Filtered Stats with Name Fallback
         const filteredHistory = useMemo(() => {
             if (filterSubjectId === 'ALL') return history;
-            return history.filter(h => h.subject?.id === filterSubjectId);
-        }, [history, filterSubjectId]);
+            
+            // Find the active subject object to get its name (label)
+            const activeFilterSubject = subjects.find(s => s.id === filterSubjectId);
+            const activeFilterLabel = activeFilterSubject ? activeFilterSubject.label : null;
+
+            return history.filter(h => {
+                // 1. Try exact ID match (best)
+                if (h.subject?.id === filterSubjectId) return true;
+                
+                // 2. Try Name match (fallback for deleted/re-added subjects)
+                if (activeFilterLabel && h.subject?.label === activeFilterLabel) return true;
+                
+                return false;
+            });
+        }, [history, filterSubjectId, subjects]);
 
         const filteredTotalMinutes = filteredHistory.reduce((acc, h) => {
              const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
@@ -539,7 +589,13 @@
              return acc + Math.max(0, raw - pause);
         }, 0);
 
-        // Daily (Always generic)
+        // Format total time text
+        const totalHours = filteredTotalMinutes / 60;
+        const totalTimeDisplay = totalHours < 1 
+            ? `${filteredTotalMinutes.toFixed(0)} min`
+            : `${totalHours.toFixed(1)}`;
+
+        // Daily
         const todayStart = new Date();
         todayStart.setHours(0,0,0,0);
         const dailyMinutes = history
@@ -868,9 +924,9 @@
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
                   <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    Heures Totales {filterSubjectId !== 'ALL' && '(Filtre)'}
+                    {filterSubjectId === 'ALL' ? 'Heures Totales' : 'Temps Total (Filtre)'}
                   </div>
-                  <div className="text-2xl font-mono font-bold text-text">{(filteredTotalMinutes / 60).toFixed(1)}</div>
+                  <div className="text-2xl font-mono font-bold text-text">{totalTimeDisplay}</div>
                 </div>
                 <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
                   <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">Série (Jours)</div>
