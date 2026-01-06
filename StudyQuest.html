@@ -62,11 +62,11 @@
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "recharts": "https://esm.sh/recharts@^3.6.0"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
   }
 }
 </script>
@@ -78,7 +78,7 @@
       import React, { useState, useEffect, useMemo, useRef } from 'https://esm.sh/react@18.2.0';
       import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client';
       import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0';
-      import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause, Filter } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
+      import { Play, Square, X, Trophy, History, Timer, Brain, Zap, Flame, Coffee, CheckCircle, Trash2, Target, Edit2, ChevronRight, Plus, Pause, Filter, Volume2 } from 'https://esm.sh/lucide-react@0.263.1?deps=react@18.2.0,react-dom@18.2.0';
 
       // --- CONSTANTS & DATA ---
 
@@ -191,45 +191,6 @@
         return streak;
       };
 
-      // --- SOUND SYSTEM (Synth) ---
-      
-      const playAlarmSound = () => {
-        try {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (!AudioContext) return;
-          
-          const ctx = new AudioContext();
-          
-          // Simple double beep function
-          const beep = (startTime, freq) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, startTime);
-            
-            // Envelope to avoid clicking
-            gain.gain.setValueAtTime(0, startTime);
-            gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
-            
-            osc.start(startTime);
-            osc.stop(startTime + 0.5);
-          };
-
-          const now = ctx.currentTime;
-          beep(now, 880);       // High beep
-          beep(now + 0.5, 880); // High beep
-          beep(now + 1.0, 1100); // Higher finish
-          
-        } catch (e) {
-          console.error("Audio synth failed", e);
-        }
-      };
-
       // --- COMPONENTS ---
 
       const CircularTimer = ({ percentage, size = 280, strokeWidth = 12, children, isOvertime = false }) => {
@@ -326,7 +287,6 @@
                   contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                   itemStyle={{ color: '#f1f5f9' }}
                   formatter={(value) => {
-                    // Display friendly format in tooltip
                     if (value < 0.02 && value > 0) return ['< 1 min', 'Temps'];
                     if (value < 1) return [`${(value * 60).toFixed(0)} min`, 'Temps'];
                     return [`${value.toFixed(1)} h`, 'Temps'];
@@ -353,7 +313,7 @@
         const [view, setView] = useState('TIMER');
         const [now, setNow] = useState(Date.now());
         const [customMinutes, setCustomMinutes] = useState('30');
-        const [selectedSubject, setSelectedSubject] = useState(DEFAULT_SUBJECTS[0]);
+        const [selectedSubject, setSelectedSubject] = useState(subjects[0] || DEFAULT_SUBJECTS[0]);
         const [showConfetti, setShowConfetti] = useState(false);
         
         // Subject Manager
@@ -363,7 +323,48 @@
 
         // History UI
         const [expandedMonths, setExpandedMonths] = useState([]);
-        const [filterSubjectId, setFilterSubjectId] = useState('ALL');
+        const [filterLabel, setFilterLabel] = useState('ALL');
+
+        // Audio Ref
+        const audioCtxRef = useRef(null);
+
+        // --- Sound Logic ---
+        const initAudio = () => {
+            if (!audioCtxRef.current) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtxRef.current = new AudioContext();
+                }
+            }
+            if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+                audioCtxRef.current.resume();
+            }
+        };
+
+        const playAlarm = () => {
+            const ctx = audioCtxRef.current;
+            if (!ctx) return;
+            
+            const t = ctx.currentTime;
+            const playTone = (freq, start, duration, type = 'sine') => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(start);
+                gain.gain.setValueAtTime(0.1, start);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+                osc.stop(start + duration);
+            };
+
+            // Melodic Sequence (C Major Arpeggio with high finish)
+            playTone(523.25, t, 0.15, 'square'); // C5
+            playTone(659.25, t + 0.15, 0.15, 'square'); // E5
+            playTone(783.99, t + 0.30, 0.15, 'square'); // G5
+            playTone(1046.50, t + 0.45, 0.4, 'triangle'); // C6
+        };
 
         // --- Persistence ---
         useEffect(() => {
@@ -398,20 +399,17 @@
 
         useEffect(() => {
           let interval;
-          // Tick every second if active and not paused
           if (activeSession && !activeSession.isPaused) {
             interval = window.setInterval(() => {
                 const currentTime = Date.now();
                 setNow(currentTime);
 
                 // --- ALARM CHECK ---
-                // Calculate elapsed time excluding pauses
                 const elapsedMS = currentTime - activeSession.startTime - (activeSession.accumulatedPauseTime || 0);
                 const targetMS = activeSession.targetDurationMinutes * 60 * 1000;
                 
-                // If we passed the target AND haven't played the alarm yet
                 if (elapsedMS >= targetMS && !activeSession.hasPlayedAlarm) {
-                    playAlarmSound();
+                    playAlarm(); // Play using persistent context
                     setActiveSession(prev => ({ ...prev, hasPlayedAlarm: true }));
                 }
 
@@ -423,15 +421,7 @@
         // --- Actions ---
 
         const startSession = (minutes) => {
-          // Initialize Audio Context on user interaction to unlock sound
-          try {
-              const AudioContext = window.AudioContext || window.webkitAudioContext;
-              if (AudioContext) {
-                  const ctx = new AudioContext();
-                  ctx.resume();
-              }
-          } catch(e) {}
-
+          initAudio(); // Initialize/Resume AudioContext on user interaction
           setActiveSession({
             id: generateId(),
             startTime: Date.now(),
@@ -448,6 +438,7 @@
 
         const togglePause = () => {
             if (!activeSession) return;
+            initAudio(); // Ensure audio is ready
             
             if (activeSession.isPaused) {
                 // RESUME
@@ -502,7 +493,7 @@
           
           if (completed) {
             if (!activeSession.hasPlayedAlarm) {
-                playAlarmSound();
+                playAlarm();
             }
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 5000);
@@ -537,12 +528,14 @@
             if (window.confirm("Supprimer cette matière ? Les sessions passées conserveront leur étiquette.")) {
                 const updated = subjects.filter(s => s.id !== id);
                 setSubjects(updated);
-                if (selectedSubject.id === id && updated.length > 0) {
-                    setSelectedSubject(updated[0]);
-                } else if (updated.length === 0) {
-                    const fallback = { id: 'default', label: 'Général', color: 'bg-slate-500', border: 'border-slate-500' };
-                    setSubjects([fallback]);
-                    setSelectedSubject(fallback);
+                // If selected subject was deleted, switch to first available
+                if (selectedSubject.id === id) {
+                     if (updated.length > 0) setSelectedSubject(updated[0]);
+                     else {
+                        // Reset to defaults if everything is deleted
+                        setSubjects(DEFAULT_SUBJECTS);
+                        setSelectedSubject(DEFAULT_SUBJECTS[0]);
+                     }
                 }
             }
         };
@@ -566,22 +559,9 @@
 
         // Filtered Stats with Name Fallback
         const filteredHistory = useMemo(() => {
-            if (filterSubjectId === 'ALL') return history;
-            
-            // Find the active subject object to get its name (label)
-            const activeFilterSubject = subjects.find(s => s.id === filterSubjectId);
-            const activeFilterLabel = activeFilterSubject ? activeFilterSubject.label : null;
-
-            return history.filter(h => {
-                // 1. Try exact ID match (best)
-                if (h.subject?.id === filterSubjectId) return true;
-                
-                // 2. Try Name match (fallback for deleted/re-added subjects)
-                if (activeFilterLabel && h.subject?.label === activeFilterLabel) return true;
-                
-                return false;
-            });
-        }, [history, filterSubjectId, subjects]);
+            if (filterLabel === 'ALL') return history;
+            return history.filter(h => h.subject?.label === filterLabel);
+        }, [history, filterLabel]);
 
         const filteredTotalMinutes = filteredHistory.reduce((acc, h) => {
              const raw = h.endTime ? (h.endTime - h.startTime) / 60000 : 0;
@@ -606,6 +586,20 @@
                 return acc + Math.max(0, raw - pause);
             }, 0);
         const dailyTarget = 120;
+
+        // Get unique subjects from both active list AND history for the filter
+        const uniqueFilterSubjects = useMemo(() => {
+            const map = new Map();
+            // Add active subjects
+            subjects.forEach(s => map.set(s.label, s));
+            // Add historical subjects (that might be deleted)
+            history.forEach(h => {
+                if (h.subject && !map.has(h.subject.label)) {
+                    map.set(h.subject.label, h.subject);
+                }
+            });
+            return Array.from(map.values());
+        }, [subjects, history]);
         
 
         // --- Renderers ---
@@ -904,16 +898,16 @@
               <div className="mb-6 overflow-x-auto no-scrollbar">
                 <div className="flex gap-2">
                    <button 
-                     onClick={() => setFilterSubjectId('ALL')}
-                     className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterSubjectId === 'ALL' ? 'bg-white text-surface border-white' : 'bg-surfaceHighlight text-muted border-transparent'}`}
+                     onClick={() => setFilterLabel('ALL')}
+                     className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterLabel === 'ALL' ? 'bg-white text-surface border-white' : 'bg-surfaceHighlight text-muted border-transparent'}`}
                    >
                      Tous
                    </button>
-                   {subjects.map(sub => (
+                   {uniqueFilterSubjects.map(sub => (
                      <button
-                       key={sub.id}
-                       onClick={() => setFilterSubjectId(sub.id)}
-                       className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterSubjectId === sub.id ? `${sub.color} text-white ${sub.border}` : 'bg-surfaceHighlight text-muted border-transparent'}`}
+                       key={sub.label} 
+                       onClick={() => setFilterLabel(sub.label)}
+                       className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${filterLabel === sub.label ? `${sub.color} text-white ${sub.border}` : 'bg-surfaceHighlight text-muted border-transparent'}`}
                      >
                        {sub.label}
                      </button>
@@ -924,7 +918,7 @@
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-surface border border-surfaceHighlight rounded-xl p-4">
                   <div className="text-[10px] font-bold text-muted uppercase tracking-wider mb-1">
-                    {filterSubjectId === 'ALL' ? 'Heures Totales' : 'Temps Total (Filtre)'}
+                    {filterLabel === 'ALL' ? 'Heures Totales' : 'Temps Total (Filtre)'}
                   </div>
                   <div className="text-2xl font-mono font-bold text-text">{totalTimeDisplay}</div>
                 </div>
