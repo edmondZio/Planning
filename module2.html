@@ -191,6 +191,126 @@
             opacity: 0.7; /* Légèrement transparent. */
         }
 
+                /* === TOOLTIP "POST-IT" === */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 10px);
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 280px;
+
+            background: #fff6a5;
+            color: #222;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+
+            font-size: 0.95rem;
+            line-height: 1.2;
+            white-space: normal;
+
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 2000;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 2px);
+            transform: translateX(-50%);
+            border-width: 8px 8px 0 8px;
+            border-style: solid;
+            border-color: #fff6a5 transparent transparent transparent;
+
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            z-index: 2001;
+        }
+
+        .tooltip:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Optionnel: sur mobile, pas de hover -> on cache pour éviter un effet gênant */
+        @media (hover: none) {
+        .tooltip::before,
+        .tooltip::after {
+            display: none;
+        }
+        }
+
+                /*
+        ==================== INFO-BULLE (POST-IT) AU SURVOL — 2 OPTIONS ====================
+
+        OBJECTIF
+        Afficher un petit texte (“post-it” / tooltip) quand la souris survole une cellule,
+        ex: la case "Trigonométrie".
+
+        ---------------------------------- OPTION A ----------------------------------
+        Tooltip NATIF (le plus simple, style imposé par le navigateur)
+
+        UTILISATION
+        1) Ajouter un attribut title à la cellule (ou à n’importe quel élément HTML).
+        Exemple :
+        <td class="clickable-cell" data-link="..." title="Mon texte d'aide ici">Trigonométrie</td>
+
+        AVANTAGES
+        - 1 ligne, compatible partout, zéro CSS/JS.
+
+        LIMITES
+        - Style non personnalisable (dépend du navigateur), rendu parfois “basique”.
+
+        ---------------------------------- OPTION B ----------------------------------
+        Tooltip “POST-IT” PERSONNALISÉ (CSS pur, style contrôlé)
+
+        PRINCIPE
+        - On met class="tooltip" sur la cellule
+        - On met le texte dans data-tooltip="..."
+
+        UTILISATION
+        1) CSS : garder dans <style> le bloc .tooltip { ... } + ::before/::after
+        2) HTML : sur la cellule voulue, ajouter class tooltip et l’attribut data-tooltip
+        Exemple :
+        <td class="clickable-cell tooltip"
+            data-link="..."
+            data-tooltip="Rappels : radians/degrés, cercle trigonométrique, valeurs exactes...">
+            Trigonométrie
+        </td>
+
+        PERSONNALISATION RAPIDE (dans le CSS)
+        - Couleur post-it : background: #fff6a5;
+        - Largeur max : max-width: 280px;
+        - Position : bottom: calc(100% + 10px); (au-dessus) / ou top: calc(100% + 10px); (en dessous)
+        - Effet d’apparition : transition / opacity / transform
+        - Triangle (flèche) : réglé via .tooltip::after (border-width / border-color)
+
+        NOTE MOBILE
+        - Sur mobile il n’y a pas de “hover”. Le CSS fourni peut cacher le tooltip avec :
+        @media (hover: none) { .tooltip::before, .tooltip::after { display:none; } }
+        Si on veut une version mobile, prévoir un clic (JS) pour afficher/masquer.
+
+        RAPPEL
+        - OPTION A = title="..."
+        - OPTION B = class="tooltip" + data-tooltip="..." + CSS correspondant
+        ==================================================================================
+        */
+
+
         .time-cell {
             /* Style pour les cellules d'horaires. */
             /*background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); /* Dégradé pastel. */
@@ -455,6 +575,7 @@
                         <!-- MODIFICATION : Changez les noms des colonnes (jours) ici. -->
                         <th style="width:200px;"></th> <!-- Cellule vide pour aligner avec les étiquettes de ligne. Le 'width' ici aide à fixer la largeur de la première colonne. -->
                         <th>Samedi 31/1</th>
+                        <th>Samedi 7/2</th>
                         <th>Samedi 7/3</th>
                         <th>Samedi 14/3</th>
                         <th>Mercredi 18/3</th>
@@ -468,6 +589,7 @@
                     <tr class="time-row">
                         <td class="row-label">🕐 Horaire du cours</td>
                         <!-- MODIFICATION : Changez les noms des colonnes (jours) ici. -->
+                        <td class="time-cell">9h - 13h15</td>
                         <td class="time-cell">11h15 - 13h15</td>
                         <td class="time-cell">11h15 - 13h15</td>
                         <td class="time-cell">9h - 11h</td>
@@ -482,7 +604,16 @@
                         <!-- Pour chaque cellule cliquable ci-dessous :
                              - MODIFICATION : Changez le texte (ex: "Simplification") pour afficher le sujet du jour.
                              - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' pour y mettre l'URL de la ressource. Mettez "#" si le lien n'est pas encore prêt. -->
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/e40cc531-618c-4a45-abd9-95b96588ebc3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Correction FM1 + Trigonométrie</td>
+                        <td class="clickable-cell tooltip"
+                            data-link="https://events.teams.microsoft.com/event/f8044e9e-ffb5-4268-b48d-e8c8af4362b4@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec"
+                            title="Accueil: méthodologie et correction de la simulation en mathématiques et physique"
+                            data-tooltip="Méthodologie et correction de la simulation en mathématiques et physique">
+                            Accueil M2
+                        </td>
+                        <td class="clickable-cell"
+                            data-link="https://events.teams.microsoft.com/event/e40cc531-618c-4a45-abd9-95b96588ebc3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">
+                            Trigonométrie
+                        </td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/3ad3cd97-402e-469e-9d23-93e41c40c77e@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/39ad1240-f8f6-4bf7-a212-338604d492e0@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/acc0a9df-c1a6-4d10-9a7d-e46697daf2f5@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie + Logarithmes</td>
@@ -495,6 +626,7 @@
                         <td class="row-label">🎯 À préparer pour:</td>
                          <!-- MODIFICATION LIEN : Chaque cellule a un lien Wooflash. Remplacez '#' ou le lien existant par le vôtre. -->
                         <td class="time-cell"> </td>
+                        <td class="time-cell"> </td>
                         <td class="clickable-cell" data-link="https://uclearn.uclouvain.be/pluginfile.php/23853/mod_folder/content/0/Questions%20G%C3%A9om%C3%A9trie%20vide.pdf?forcedownload=1">Ex: </td>
                         <td class="time-cell"> </td>
                         <td class="clickable-cell" data-link="">...</td>
@@ -506,7 +638,8 @@
 
                     <tr class="questionnaire-row">
                         <td class="row-label">❓ Questions à traiter:</td>
-                        <td class="clickable-cell" data-link=""> </td>
+                        <td class="time-cell"> </td>
+                        <td class="time-cell"> </td>
                         <td class="clickable-cell" data-link="https://forms.cloud.microsoft/e/Gzd4x5uicC">Questionnaire Géométrie</td>
                         <td class="time-cell"> </td>
                         <td class="time-cell"> </td>
