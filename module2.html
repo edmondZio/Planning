@@ -246,13 +246,13 @@
             opacity: 1;
         }
 
-        /* Optionnel: sur mobile, pas de hover -> on cache pour éviter un effet gênant */
+        /* Optionnel: sur mobile, pas de hover -> on cache pour éviter un effet gênant 
         @media (hover: none) {
         .tooltip::before,
         .tooltip::after {
             display: none;
         }
-        }
+        }*/
 
                 /*
         ==================== INFO-BULLE (POST-IT) AU SURVOL — 2 OPTIONS ====================
@@ -487,6 +487,7 @@
             color: white;
         }
 
+
         /* === RESPONSIVE DESIGN (Adaptation aux petits écrans) === */
 
         @media (max-width: 768px) {
@@ -610,11 +611,13 @@
                             data-tooltip="Méthodologie et début de la correction de la simulation en mathématiques et physique">
                             Accueil M2
                         </td>
-                        <td class="clickable-cell"
-                            data-link="https://events.teams.microsoft.com/event/e40cc531-618c-4a45-abd9-95b96588ebc3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">
+                        <td class="clickable-cell tooltip"
+                            data-link="https://mividis.uclouvain.be/permalink/v126d32732e5am3d9tnx/"
+                            title="Correction de la simulation + Prérequis Géométrie."
+                            data-tooltip="Correction de la simulation + Prérequis Géométrie.">
                             Trigonométrie
                         </td>
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/3ad3cd97-402e-469e-9d23-93e41c40c77e@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/3ad3cd97-402e-469e-9d23-93e41c40c77e@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigo - Géométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/39ad1240-f8f6-4bf7-a212-338604d492e0@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/acc0a9df-c1a6-4d10-9a7d-e46697daf2f5@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie + Logarithmes</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/779dc780-a3dc-4aa0-a17b-cdcc5f05f821@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Logarithmes</td>
@@ -624,7 +627,6 @@
                     <!-- LIGNE PRÉPARATION MATIN -->
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
-                         <!-- MODIFICATION LIEN : Chaque cellule a un lien Wooflash. Remplacez '#' ou le lien existant par le vôtre. -->
                         <td class="time-cell"> </td>
                         <td class="clickable-cell" data-link="https://uclearn.uclouvain.be/pluginfile.php/23854/mod_folder/content/0/20260110%20Questions%20trigonom%C3%A9trie.pdf?forcedownload=1">Q34, 36, 44, 46, 47, 50, 54, 56, 57, 61, 65 </td>
                         <td class="clickable-cell" data-link="https://uclearn.uclouvain.be/pluginfile.php/23853/mod_folder/content/0/Questions%20G%C3%A9om%C3%A9trie%20vide.pdf?forcedownload=1">Q5, 7, 11, 14, 15, 28, 32, 33, 34, 40, 56, 59, 61 </td>
@@ -774,11 +776,11 @@
 
                 <div class="resource-category pdfs">
                     <h3>📄 PDFs</h3>
-                    <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=19157"><span class="icon">📚</span><span class="text">Supports du cours (vides)</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=20897"><span class="icon"> ✨</span><span class="text">Documents module 1</span><span class="status">✅</span></div>
+                    <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=19157"><span class="icon"> ▶️ </span><span class="text">Supports du cours (vides)</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=19158"><span class="icon">📚</span><span class="text">Supports du cours (complétés)</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/hvp/view.php?id=20647"><span class="icon">📖</span><span class="text">Syllabus</span><span class="status">✅</span></div>
-                     <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/IQC3rYDDFiqrRLcr2ZudqJUsAXeXQLrF9sHKujTFEQx7v1I"><span class="icon">📝</span><span class="text">Correctif du Syllabus</span><span class="status">✅</span></div>
-                <!--        <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/EYbUBH8kbhNNnwa0gLnlOiAB0PBjFf8PQMbgBhMTI6N9Hw?e=Z1L8Gf"><span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span></div>-->
+                    <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/IQC3rYDDFiqrRLcr2ZudqJUsAXeXQLrF9sHKujTFEQx7v1I"><span class="icon">📝</span><span class="text">Correctif du Syllabus</span><span class="status">✅</span></div>
                 </div>
 
             </div>
