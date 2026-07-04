@@ -434,13 +434,13 @@
                     <tr>
                         <!-- MODIFICATION : Changez les noms des colonnes (jours) ici. -->
                         <th style="width:200px;"></th> <!-- Cellule vide pour aligner avec les étiquettes de ligne. Le 'width' ici aide à fixer la largeur de la première colonne. -->
-                        <th>Vendredi 1/8</th>
-                        <th>Samedi 2/8</th>
-                        <th>Lundi 4/8</th>
-                        <th>Mardi 5/8</th>
-                        <th>Mercredi 6/8</th>
-                        <th>Jeudi 7/8</th>
-                        <th>Vendredi 8/8</th>
+                        <th>Vendredi 31/7</th>
+                        <th>Samedi 1/8</th>
+                        <th>Lundi 3/8</th>
+                        <th>Mardi 4/8</th>
+                        <th>Mercredi 5/8</th>
+                        <th>Jeudi 6/8</th>
+                        <th>Vendredi 7/8</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -457,26 +457,26 @@
                         <!-- Pour chaque cellule cliquable ci-dessous :
                              - MODIFICATION : Changez le texte (ex: "Simplification") pour afficher le sujet du jour.
                              - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' pour y mettre l'URL de la ressource. Mettez "#" si le lien n'est pas encore prêt. -->
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01ce8ce6xjpe6r1/">Simplification</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01ddc80ccv7543a/">Problèmes</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01fc4eff36hyiob/">Trigonométrie</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b020b95e7vzyldhg/">Géométrie</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b021ad4b244robxm/">Les fonctions</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b022a166deps1roa/">Les intégrales</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b023a3711x7ivjy2/">Statistiques & Pourcentages</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/d99a2e3d-e321-4018-82af-a85bac43141c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Simplification</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/7a4dc646-81ec-4d2a-a514-281198d78f8d@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Problèmes</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/613ca51c-6c7d-4247-8902-aaf5e31ce98f@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/b5f30d8a-0fcd-48b9-a913-82f008384ada@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/7e32fafd-6db8-442a-b655-c221de81955d@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les fonctions</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/4557da1a-f774-445f-948e-5fb502391c1a@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les intégrales</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/f7c7751a-8b03-4776-aad4-a85e16f04fa9@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Statistiques & Pourcentages</td>
                     </tr>
 
                     <!-- LIGNE PRÉPARATION MATIN -->
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
                          <!-- MODIFICATION LIEN : Chaque cellule a un lien Wooflash. Remplacez '#' ou le lien existant par le vôtre. -->
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/7CZ2MUPH?from=1">Wooflash 1</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/IV83ZALJ?from=1">Q16, 17, 20, 22, 23,30,37</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/U1NV9TNG?from=1">Wooflash 5</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/0H0K4UIC?from=1">Wooflash 6</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/K4L1H9KJ?from=1">Q34, 43, 44</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/GIUA8RF7?from=1">Wooflash 10</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/TQSMIQ4X?from=1">Wooflash 11</td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
                     </tr>
                     
                     <!-- ... (Le même principe s'applique à toutes les autres lignes du tableau) ... -->
@@ -509,22 +509,22 @@
                     </tr>
                     <tr class="subject-row">
                         <td class="row-label">📖 Sujet et Live</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01cef7841uutswg/">Équations & Inéquations</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01de39551t4j83u/">Calcul Vectoriel</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b01fcbdd3gheu7sf/">Trigonométrie</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b020c0079mhnotco/">Logarithmes & Exponentielles</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b021b6786bs2y69i/">Les dérivées</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b022a850amckmdof/">Les intégrales</td>
-                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126b023a3617d73edy1/">Révision générale</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/ff210ff3-78fe-4186-a8a3-7bcac8537df6@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Équations & Inéquations</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/0d682152-1a6b-4923-9652-406f56b67a67@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Calcul Vectoriel</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/dd39b2f7-bce8-43cc-87ce-3cb0f479c498@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/24bbf6db-068e-4556-80bc-a1e0d2f24027@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Logarithmes & Exponentielles</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/8c80051c-543d-4097-ab57-230bfdb9744e@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les dérivées</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/f36f92be-c473-4862-a836-5b0f62beb136@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Les intégrales</td>
+                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/dc8ff13a-d7ea-4cbd-94c6-49fedf4d4fc3@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Révision générale</td>
                         <!--<td class="phantom"> </td>  Cellule vide et invisible pour la mise en page -->
                     </tr>
                     <tr class="preparation-row">
                         <td class="row-label">🎯 À préparer pour:</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/ZT62PTEO?from=1">Wooflash 2</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/95K0HV2E?from=1">Q14, 21, 24, 33, 36</td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
                         <td class="phantom"> </td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/R707WSKB?from=1">Wooflash 7</td>
-                        <td class="clickable-cell" data-link="https://app.wooflash.com/join/SDG6219W?from=1">Q25, 28, 33, 37, 40, 41, 44, 49, 50</td>
+                        <td class="clickable-cell" data-link=" "> </td>
+                        <td class="clickable-cell" data-link=" "> </td>
                         <td class="phantom"> </td>
                         <td class="phantom"> </td>
                     </tr>
