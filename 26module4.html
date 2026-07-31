@@ -22,6 +22,25 @@
             padding: 0; /* Supprime tous les paddings (remplissage interne) par défaut. */
             box-sizing: border-box; /* Une règle très utile : elle inclut le padding et la bordure dans la largeur/hauteur totale d'un élément, ce qui facilite grandement la mise en page. */
         }
+/* === NOTE D'ATTENTION ROUGE === */
+.attention-note {
+    background-color: #ffe6e6; /* Fond rouge très pâle */
+    border: 3px dashed #dc3545; /* Bordure pointillée rouge vif (effet tampon) */
+    color: #b71c1c; /* Texte rouge foncé */
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(220, 53, 69, 0.1); /* Légère ombre rouge */
+}
+
+.attention-note span {
+    display: block;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
         body {
             /* Cible la balise <body>, qui est le conteneur de tout le contenu visible de la page. */
@@ -423,8 +442,21 @@
         <div class="header">
             <!-- MODIFICATION : Changez les textes ici pour votre cours. -->
             <h1>📚 Planning du module 4 du cours de mathématiques</h1>
-            <p>Cliquer sur les éléments pour accéder aux ressources</p>
+            <p>Cliquez sur les éléments pour accéder aux ressources</p>
         </div>
+
+                </div> <!-- Fin du header -->
+
+
+        <!-- DÉBUT NOTE ATTENTION PRÉPARATION -->
+        <div class="attention-note">
+            ⚠️ ATTENTION : N'oubliez pas de choisir les questions qui vous paraissent difficiles (des questionnaires 1 et 2) et que vous voulez qu'on travaille ensemble lors du prochain cours !
+        </div>
+        <!-- FIN NOTE ATTENTION PRÉPARATION -->
+
+
+        <div class="schedule-wrapper">
+
 
         <div class="schedule-wrapper">
             <!-- Wrapper pour le défilement horizontal sur mobile. -->
@@ -457,7 +489,7 @@
                         <!-- Pour chaque cellule cliquable ci-dessous :
                              - MODIFICATION : Changez le texte (ex: "Simplification") pour afficher le sujet du jour.
                              - MODIFICATION LIEN : Changez la valeur de 'data-link="..."' pour y mettre l'URL de la ressource. Mettez "#" si le lien n'est pas encore prêt. -->
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/d99a2e3d-e321-4018-82af-a85bac43141c@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Simplification</td>
+                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126d51ae78d7uqpsdhe/">Simplification</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/7a4dc646-81ec-4d2a-a514-281198d78f8d@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Problèmes</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/613ca51c-6c7d-4247-8902-aaf5e31ce98f@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/b5f30d8a-0fcd-48b9-a913-82f008384ada@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Géométrie</td>
@@ -509,7 +541,7 @@
                     </tr>
                     <tr class="subject-row">
                         <td class="row-label">📖 Sujet et Live</td>
-                        <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/ff210ff3-78fe-4186-a8a3-7bcac8537df6@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Équations & Inéquations</td>
+                        <td class="clickable-cell" data-link="https://mividis.uclouvain.be/permalink/v126d51aebe72zxq7q5x/">Équations & Inéquations</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/0d682152-1a6b-4923-9652-406f56b67a67@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Calcul Vectoriel</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/dd39b2f7-bce8-43cc-87ce-3cb0f479c498@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Trigonométrie</td>
                         <td class="clickable-cell" data-link="https://events.teams.microsoft.com/event/24bbf6db-068e-4556-80bc-a1e0d2f24027@7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec">Logarithmes & Exponentielles</td>
