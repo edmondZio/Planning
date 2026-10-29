@@ -23,6 +23,27 @@
             box-sizing: border-box; /* Une règle très utile : elle inclut le padding et la bordure dans la largeur/hauteur totale d'un élément, ce qui facilite grandement la mise en page. */
         }
 
+        /* === NOTE D'ATTENTION ROUGE === */
+.attention-note {
+    background-color: #ffe6e6; /* Fond rouge très pâle */
+    border: 3px dashed #dc3545; /* Bordure pointillée rouge vif (effet tampon) */
+    color: #b71c1c; /* Texte rouge foncé */
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(220, 53, 69, 0.1); /* Légère ombre rouge */
+}
+
+.attention-note span {
+    display: block;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
         body {
             /* Cible la balise <body>, qui est le conteneur de tout le contenu visible de la page. */
             font-family: 'Arial', sans-serif; /* Définit la police de caractères pour toute la page. MODIFICATION : Vous pouvez changer 'Arial' par 'Verdana', 'Helvetica', ou une police Google Fonts. 'sans-serif' est une police de secours. */
@@ -445,7 +466,13 @@
             <h1>📚 Planning du module 1 du cours de mathématiques</h1>
             <p>Cliquer sur les éléments pour accéder aux ressources</p>
         </div>
-
+<!-- DÉBUT NOTE ATTENTION PRÉPARATION -->
+        <div class="attention-note">
+            <h2>✨ Le syllabus 2027 est là ! ✨</h2>
+<p><h3>
+Vous pouvez y accéder dans la rubrique PDFs / Support ci-bas. <p>
+        </div>
+        <!-- FIN NOTE ATTENTION PRÉPARATION -->
         <div class="schedule-wrapper">
             <!-- Wrapper pour le défilement horizontal sur mobile. -->
             <table class="schedule-table">
@@ -570,7 +597,8 @@
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=25054&forceview=1"><span class="icon">📚</span><span class="text">Supports du cours (Documents vierges)</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=25055&forceview=1"><span class="icon">📚</span><span class="text">Supports du cours (Documents complétés)</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=28022"><span class="icon">📝</span><span class="text">Fiches Méthodes et Solutions</span><span class="status">✅</span></div>
-                    <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/hvp/view.php?id=25063"><span class="icon">📖</span><span class="text">Syllabus numérique version 2026</span><span class="status">✅</span></div>
+                    <div class="resource-item" style="background: #ffc2d9;" data-link="https://uclearn.uclouvain.be/pluginfile.php/40710/mod_resource/content/1/Syllabus%20math%20-27%20-t%20-ldef.pdf"><span class="icon">📖</span><span class="text">Syllabus Mathématiques lowdef 2027</span><span class="status">✅</span></div>
+                    <div class="resource-item" style="background: #ffc2d9;" data-link="https://uclearn.uclouvain.be/pluginfile.php/40711/mod_resource/content/2/Syllabus%20math%20-27%20-t%20-hdef.pdf"><span class="icon">📖</span><span class="text">Syllabus Mathématiques highdef 2027</span><span class="status">✅</span></div>
                     <div class="resource-item" data-link="https://uclearn.uclouvain.be/mod/folder/view.php?id=27816&forceview=1"><span class="icon">📖</span><span class="text">Concours MEDE/DENT/VETE Flandres 2026</span><span class="status">✅</span></div>
                 <!--     <div class="resource-item" data-link="https://uclouvain-my.sharepoint.com/:b:/g/personal/edmond_sahyoun_uclouvain_be/EYbUBH8kbhNNnwa0gLnlOiAB0PBjFf8PQMbgBhMTI6N9Hw?e=Z1L8Gf"><span class="icon">❓</span><span class="text">Questions intégrales Extra</span><span class="status">✅</span></div>-->
                 </div>
